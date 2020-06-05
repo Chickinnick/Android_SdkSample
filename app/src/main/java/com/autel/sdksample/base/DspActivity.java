@@ -2,6 +2,7 @@ package com.autel.sdksample.base;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,6 +18,7 @@ import com.autel.common.dsp.RFData;
 import com.autel.common.error.AutelError;
 import com.autel.sdk.dsp.AutelDsp;
 import com.autel.sdksample.R;
+import com.autel.sdksample.util.ThreadUtils;
 
 import java.util.List;
 
@@ -113,10 +115,16 @@ public abstract class DspActivity extends BaseActivity<AutelDsp> {
                     }
 
                     @Override
-                    public void onSuccess(List<RFData> data) {
-                        rfListAdapter.setRfData(data);
-                        dspRFList.setAdapter(rfListAdapter);
-                        logOut("getRFDataList  data  " + data);
+                    public void onSuccess(final List<RFData> data) {
+                        ThreadUtils.getMainHander().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                rfListAdapter.setRfData(data);
+                                dspRFList.setAdapter(rfListAdapter);
+                                logOut("getRFDataList  data  " + data);
+                            }
+                        });
+
                     }
                 });
             }

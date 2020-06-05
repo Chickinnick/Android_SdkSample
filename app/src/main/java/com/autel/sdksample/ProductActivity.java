@@ -14,6 +14,7 @@ import com.autel.common.product.AutelProductType;
 import com.autel.sdk.Autel;
 import com.autel.sdk.ProductConnectListener;
 import com.autel.sdk.product.BaseProduct;
+import com.autel.sdksample.evo2.EVO2Layout;
 import com.autel.sdksample.evo.G2Layout;
 import com.autel.sdksample.premium.XStarPremiumLayout;
 import com.autel.sdksample.util.FileUtils;
@@ -100,6 +101,8 @@ public class ProductActivity extends AppCompatActivity {
                 return new XStarLayout(this).getLayout();
             case EVO:
                 return new G2Layout(this).getLayout();
+            case EVO_2:
+                return new EVO2Layout(this).getLayout();
             case PREMIUM:
                 return new XStarPremiumLayout(this).getLayout();
 
