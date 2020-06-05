@@ -339,6 +339,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void initListener(){
+        if(null == missionManager) return;
         missionManager.setRealTimeInfoListener(new CallbackWithOneParam<RealTimeInfo>() {
             @Override
             public void onSuccess(RealTimeInfo realTimeInfo) {
