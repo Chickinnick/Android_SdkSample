@@ -113,7 +113,7 @@ public class Evo2GimbalActivity extends GimbalActivity {
                 angleData.setPitch(pitch);
                 angleData.setRoll(roll);
                 angleData.setYaw(yaw);
-                mXStarEvoGimbal.setGimbalAngle(pitch);
+                mXStarEvoGimbal.setGimbalAngle(pitch,yaw,roll);
             }
         });
         findViewById(R.id.setGimbalAngleSpeed).setOnClickListener(new View.OnClickListener() {
