@@ -960,6 +960,22 @@ public class CameraXT701Fragment extends CameraBaseFragment {
                 });
             }
         });
+        view.findViewById(R.id.formatMMCard).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                xt701.formatFlashMemoryCard(new CallbackWithNoParam() {
+                    @Override
+                    public void onFailure(AutelError error) {
+                        logOut("formatMMCard " + error.getDescription());
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        logOut("formatMMCard onSuccess");
+                    }
+                });
+            }
+        });
 
         view.findViewById(R.id.getVideoSum).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -25,7 +25,7 @@ public class CameraBaseFragment extends Fragment {
     AutelBaseCamera baseCamera;
 
     private Spinner mediaModeList;
-    protected MediaMode mediaMode;
+    protected MediaMode mediaMode = MediaMode.SINGLE;
 
     protected void initClick(View view) {
         log_output = (TextView) view.findViewById(R.id.camera_log_output);
@@ -233,6 +233,7 @@ public class CameraBaseFragment extends Fragment {
                 });
             }
         });
+
         view.findViewById(R.id.stopTimelapse).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

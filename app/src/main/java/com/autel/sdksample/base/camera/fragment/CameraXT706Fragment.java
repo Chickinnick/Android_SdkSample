@@ -210,6 +210,23 @@ public class CameraXT706Fragment extends CameraBaseFragment {
 
 
     private void initXT706Click(final View view) {
+
+        view.findViewById(R.id.formatMMCard).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                xt706.formatFlashMemoryCard(new CallbackWithNoParam() {
+                    @Override
+                    public void onFailure(AutelError error) {
+                        logOut("formatMMCard " + error.getDescription());
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        logOut("formatMMCard onSuccess");
+                    }
+                });
+            }
+        });
         view.findViewById(R.id.getStateInfo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
