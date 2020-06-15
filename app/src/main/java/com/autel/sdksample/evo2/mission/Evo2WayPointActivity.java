@@ -235,7 +235,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         cruiserWaypoint4.waypointType = WaypointType.STANDARD;
         List<WaypointAction> list4 = new ArrayList<>();
         WaypointAction point4Action1 = new WaypointAction();
-        point4Action1.actionType = MissionActionType.START_TIME_LAPSE_SHOOT; //定时拍照
+        point4Action1.actionType = MissionActionType.START_TIME_LAPSE_SHOOT; //定时拍照(2s间隔)
         point4Action1.parameters = new int[]{0, 180, 2, 0, 0, 0, 0};
         list4.add(point4Action1);
         cruiserWaypoint4.actions = list4;
@@ -252,7 +252,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         cruiserWaypoint5.waypointType = WaypointType.STANDARD;
         List<WaypointAction> list5 = new ArrayList<>();
         WaypointAction point5Action1 = new WaypointAction();
-        point5Action1.actionType = MissionActionType.START_DISTANCE_SHOOT; //定距拍照
+        point5Action1.actionType = MissionActionType.START_DISTANCE_SHOOT; //定距拍照(10m间隔)
         point5Action1.parameters = new int[]{0, 180, 0, 0, 10, 0, 0};
         list5.add(point5Action1);
         cruiserWaypoint5.actions = list5;
