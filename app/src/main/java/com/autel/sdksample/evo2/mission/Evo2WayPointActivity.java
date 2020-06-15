@@ -168,7 +168,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         cruiserWaypoint1.poiIndex = -1; //关联的兴趣点id
         cruiserWaypoint1.flyTime = 0; //飞行时间（单位s）
         cruiserWaypoint1.hoverTime = 0; //飞越时0，悬停则传入具体时间（单位s）
-        cruiserWaypoint1.flyDistance = 0;
+        cruiserWaypoint1.flyDistance = 0;//飞行距离（单位m）
         cruiserWaypoint1.headingMode = WaypointHeadingMode.CUSTOM_DIRECTION; //航向沿航线
         cruiserWaypoint1.waypointType = WaypointType.STANDARD; //航点类型 飞越（STANDARD）或者悬停（HOVER）
         //航点1为飞越，可添加0个或1个相机动作
