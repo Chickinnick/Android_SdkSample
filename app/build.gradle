@@ -68,7 +68,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile('com.squareup.okhttp3:okhttp:3.8.1')
     implementation 'com.autel:autel-sdk:2.0.11.75@aar'
-//    api(name: "autel-sdk-release", ext: "aar") {
+//    api(name: "autel-sdk-2.0.11-evo-release-20200615.024158-4", ext: "aar") {
 //        exclude module: 'okio'
 //        exclude module: 'okhttp'
 //    }

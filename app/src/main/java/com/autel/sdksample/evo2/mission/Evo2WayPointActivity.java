@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
+
 import com.autel.common.CallbackWithNoParam;
 import com.autel.common.CallbackWithOneParam;
 import com.autel.common.CallbackWithOneParamProgress;
@@ -35,11 +36,12 @@ import com.autel.sdk.remotecontroller.AutelRemoteController;
 import com.autel.sdksample.R;
 import com.autel.sdksample.TestApplication;
 import com.autel.util.log.AutelLog;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Evo2WayPointActivity extends AppCompatActivity implements View.OnClickListener{
+public class Evo2WayPointActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Evo2WaypointMission autelMission;
     private Evo2FlyController mEvoFlyController;
@@ -52,10 +54,15 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
     private boolean isImuOk = false; //当前IMU是否OK
     private boolean isGpsOk = false; //当前gps是否OK
     private boolean isImageTransOk = false; //当前图传信号是否OK
-    enum FlyState{
+    private boolean isCanTakeOff = false; //是否能起飞
+
+    enum FlyState {
         Prepare, Start, Pause, None
     }
+
     private FlyState flyState = FlyState.None;
+
+    private int id = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,15 +71,15 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_evo2_waypoint);
 
         BaseProduct product = ((TestApplication) getApplicationContext()).getCurrentProduct();
-        if(null != product && product.getType() == AutelProductType.EVO_2){
+        if (null != product && product.getType() == AutelProductType.EVO_2) {
             missionManager = product.getMissionManager();
             missionManager.setRealTimeInfoListener(new CallbackWithOneParam<RealTimeInfo>() {
                 @Override
                 public void onSuccess(RealTimeInfo realTimeInfo) {
                     Evo2WaypointRealTimeInfoImpl info = (Evo2WaypointRealTimeInfoImpl) realTimeInfo;
                     AutelLog.d("MissionRunning", "timeStamp:" + info.timeStamp + ",speed:" + info.speed + ",isArrived:" + info.isArrived +
-                            ",isDirecting:"+ info.isDirecting + ",waypointSequence:" + info.waypointSequence + ",actionSequence:" + info.actionSequence +
-                            ",photoCount:" + info.photoCount + ",MissionExecuteState:" + info.executeState+ ",remainFlyTime:" + info.remainFlyTime);
+                            ",isDirecting:" + info.isDirecting + ",waypointSequence:" + info.waypointSequence + ",actionSequence:" + info.actionSequence +
+                            ",photoCount:" + info.photoCount + ",MissionExecuteState:" + info.executeState + ",remainFlyTime:" + info.remainFlyTime);
                 }
 
                 @Override
@@ -110,11 +117,12 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
                 @Override
                 public void onSuccess(EvoFlyControllerInfo evoFlyControllerInfo) {
                     isCompassOk = evoFlyControllerInfo.getFlyControllerStatus().isCompassValid();
+                    isCanTakeOff = evoFlyControllerInfo.getFlyControllerStatus().isTakeOffValid();
 
                     isImuOk = evoFlyControllerInfo.getFlyControllerStatus().getArmErrorCode() != ARMWarning.IMU_LOSS
                             && evoFlyControllerInfo.getFlyControllerStatus().getArmErrorCode() != ARMWarning.DISARM_IMU_LOSS;
 
-                    isGpsOk = evoFlyControllerInfo.getGpsInfo().getSatellitesVisible() != 0;
+                    isGpsOk = evoFlyControllerInfo.getFlyControllerStatus().isGpsValid();
                 }
 
                 @Override
@@ -136,12 +144,12 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
                 }
             });
         }
-
+        AutelLog.d("init missionManager" + missionManager);
         initView();
         initData();
     }
 
-    private void initView(){
+    private void initView() {
         findViewById(R.id.prepare).setOnClickListener(this);
         findViewById(R.id.start).setOnClickListener(this);
         findViewById(R.id.pause).setOnClickListener(this);
@@ -150,9 +158,10 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         findViewById(R.id.download).setOnClickListener(this);
     }
 
-    private void initData(){
+    private void initData() {
         autelMission = new Evo2WaypointMission();
-        autelMission.missionId = 1; //任务id
+
+        autelMission.missionId = id++; //任务id
         autelMission.missionType = MissionType.Waypoint; //任务类型(Waypoint(航点)、RECTANGLE(矩形)、POLYGON(多边形))
         autelMission.totalFlyTime = 351; //总飞行时间(单位s)
         autelMission.totalDistance = 897; //总飞行距离(单位m)
@@ -176,7 +185,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         //添加相机动作
         WaypointAction action1 = new WaypointAction();
         action1.actionType = MissionActionType.START_RECORD; //开始录像
-        action1.parameters = new int[]{0, 180, 0, 0, 0, 0, 0}; //设置录像参数(参数1：云台pitch角度 参数2：机头朝向角度 余下参数根据相机动作不同而不同)
+        action1.parameters = new int[]{0, 180, 0, 0, 0, 0, 0, 20, 0, 0}; //设置录像参数(参数1：云台pitch角度 参数2：机头朝向角度 余下参数根据相机动作不同而不同)
         list1.add(action1);
         cruiserWaypoint1.actions = list1;
         wpList.add(cruiserWaypoint1);
@@ -195,13 +204,13 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         //添加相机动作1 定实拍 (定时拍间隔为2s，定实拍时长为40s）
         WaypointAction point2Action1 = new WaypointAction();
         point2Action1.actionType = MissionActionType.START_TIME_LAPSE_SHOOT;
-        point2Action1.parameters = new int[]{-45, 180, 2, 40, 0, 0, 0};
+        point2Action1.parameters = new int[]{-45, 180, 2, 40, 0, 0, 0, 20, 0, 0};
         list2.add(point2Action1);
         wpList.add(cruiserWaypoint2);
         //添加相机动作2 开始录像 (录像时长为60s)
         WaypointAction point2Action2 = new WaypointAction();
         point2Action2.actionType = MissionActionType.START_RECORD;
-        point2Action2.parameters = new int[]{-23, 180, 0, 0, 0, 60, 0};
+        point2Action2.parameters = new int[]{-23, 180, 0, 0, 0, 60, 0, 20, 0, 0};
         list2.add(point2Action2);
 
         cruiserWaypoint2.actions = list2;
@@ -219,7 +228,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         List<WaypointAction> list3 = new ArrayList<>();
         WaypointAction point3Action1 = new WaypointAction();
         point3Action1.actionType = MissionActionType.TAKE_PHOTO; //拍照
-        point3Action1.parameters = new int[]{0, 180, 0, 0, 0, 0, 0};
+        point3Action1.parameters = new int[]{0, 180, 0, 0, 0, 0, 0, 20, 0, 0};
         list3.add(point3Action1);
         cruiserWaypoint3.actions = list3;
         wpList.add(cruiserWaypoint3);
@@ -236,7 +245,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         List<WaypointAction> list4 = new ArrayList<>();
         WaypointAction point4Action1 = new WaypointAction();
         point4Action1.actionType = MissionActionType.START_TIME_LAPSE_SHOOT; //定时拍照(2s间隔)
-        point4Action1.parameters = new int[]{0, 180, 2, 0, 0, 0, 0};
+        point4Action1.parameters = new int[]{0, 180, 2, 0, 0, 0, 0, 20, 0, 0};
         list4.add(point4Action1);
         cruiserWaypoint4.actions = list4;
         wpList.add(cruiserWaypoint4);
@@ -253,7 +262,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         List<WaypointAction> list5 = new ArrayList<>();
         WaypointAction point5Action1 = new WaypointAction();
         point5Action1.actionType = MissionActionType.START_DISTANCE_SHOOT; //定距拍照(10m间隔)
-        point5Action1.parameters = new int[]{0, 180, 0, 0, 10, 0, 0};
+        point5Action1.parameters = new int[]{0, 180, 0, 0, 10, 0, 0, 20, 0, 0};
         list5.add(point5Action1);
         cruiserWaypoint5.actions = list5;
         wpList.add(cruiserWaypoint5);
@@ -270,7 +279,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         List<WaypointAction> list6 = new ArrayList<>();
         WaypointAction point6Action1 = new WaypointAction();
         point6Action1.actionType = MissionActionType.START_RECORD; //开始录像
-        point6Action1.parameters = new int[]{0, 180, 0, 0, 0, 0, 0};
+        point6Action1.parameters = new int[]{0, 180, 0, 0, 0, 0, 0, 20, 0, 0};
         list6.add(point6Action1);
         cruiserWaypoint6.actions = list6;
         wpList.add(cruiserWaypoint6);
@@ -287,7 +296,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         List<WaypointAction> list7 = new ArrayList<>();
         WaypointAction point7Action1 = new WaypointAction();
         point7Action1.actionType = MissionActionType.STOP_RECORD; //结束录像
-        point7Action1.parameters = new int[]{0, 180, 0, 0, 0, 0, 0};
+        point7Action1.parameters = new int[]{0, 180, 0, 0, 0, 0, 0, 20, 0, 0};
         list7.add(point7Action1);
         cruiserWaypoint7.actions = list7;
         wpList.add(cruiserWaypoint7);
@@ -313,18 +322,18 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View view) {
         final int id = view.getId();
-        switch (id){
-            case R.id.prepare:{
+        switch (id) {
+            case R.id.prepare: {
                 //飞行之前，必须进行必要的飞行检查
-                if(!flyCheck()){
+                if (!flyCheck()) {
                     return;
                 }
 
-                if(flyState != FlyState.None){
+                if (flyState != FlyState.None) {
                     Toast.makeText(Evo2WayPointActivity.this, "当前状态，不能执行", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(null != missionManager){
+                if (null != missionManager) {
                     missionManager.prepareMission(autelMission, new CallbackWithOneParamProgress<Boolean>() {
                         @Override
                         public void onProgress(float v) {
@@ -334,11 +343,14 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
                         @Override
                         public void onSuccess(Boolean aBoolean) {
                             flyState = FlyState.Prepare;
+                            AutelLog.d("prepareMission success");
                             Toast.makeText(Evo2WayPointActivity.this, "prepare success", Toast.LENGTH_LONG).show();
                         }
 
                         @Override
                         public void onFailure(AutelError autelError) {
+                            AutelLog.d("prepareMission onFailure");
+                            Toast.makeText(Evo2WayPointActivity.this, "prepare failed", Toast.LENGTH_LONG).show();
 
                         }
                     });
@@ -346,12 +358,12 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
             }
             break;
 
-            case R.id.start:{
-                if(flyState != FlyState.Prepare){
+            case R.id.start: {
+                if (flyState != FlyState.Prepare) {
                     Toast.makeText(Evo2WayPointActivity.this, "当前状态，不能执行", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(null != missionManager) {
+                if (null != missionManager) {
                     missionManager.startMission(new CallbackWithNoParam() {
                         @Override
                         public void onSuccess() {
@@ -368,12 +380,12 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
             }
             break;
 
-            case R.id.pause:{
-                if(flyState != FlyState.Start){
+            case R.id.pause: {
+                if (flyState != FlyState.Start) {
                     Toast.makeText(Evo2WayPointActivity.this, "当前状态，不能执行", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(null != missionManager) {
+                if (null != missionManager) {
                     missionManager.pauseMission(new CallbackWithNoParam() {
                         @Override
                         public void onSuccess() {
@@ -390,12 +402,12 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
             }
             break;
 
-            case R.id.resume:{
-                if(flyState != FlyState.Pause){
+            case R.id.resume: {
+                if (flyState != FlyState.Pause) {
                     Toast.makeText(Evo2WayPointActivity.this, "当前状态，不能执行", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(null != missionManager) {
+                if (null != missionManager) {
                     missionManager.resumeMission(new CallbackWithNoParam() {
                         @Override
                         public void onSuccess() {
@@ -412,12 +424,12 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
             }
             break;
 
-            case R.id.cancel:{
-                if(flyState == FlyState.None){
+            case R.id.cancel: {
+                if (flyState == FlyState.None) {
                     Toast.makeText(Evo2WayPointActivity.this, "当前状态，不能执行", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(null != missionManager) {
+                if (null != missionManager) {
                     missionManager.cancelMission(new CallbackWithNoParam() {
                         @Override
                         public void onSuccess() {
@@ -433,12 +445,12 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
             }
             break;
 
-            case R.id.download:{
-                if(flyState == FlyState.None){
+            case R.id.download: {
+                if (flyState == FlyState.None) {
                     Toast.makeText(Evo2WayPointActivity.this, "当前状态，不能执行", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(null != missionManager) {
+                if (null != missionManager) {
                     missionManager.downloadMission(new CallbackWithOneParamProgress<AutelMission>() {
                         @Override
                         public void onProgress(float v) {
@@ -461,29 +473,33 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private boolean flyCheck(){
-        if(!isBatteryOk){
+    private boolean flyCheck() {
+        if (!isBatteryOk) {
             Toast.makeText(Evo2WayPointActivity.this, "当前电池电量不足", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if(!isImuOk){
+        if (!isImuOk) {
             Toast.makeText(Evo2WayPointActivity.this, "IMU异常", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if(isGpsOk){
+        if (!isGpsOk) {
             Toast.makeText(Evo2WayPointActivity.this, "GPS异常", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if(!isCompassOk){
+        if (!isCompassOk) {
             Toast.makeText(Evo2WayPointActivity.this, "指南针异常", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if(!isImageTransOk){
+        if (!isImageTransOk) {
             Toast.makeText(Evo2WayPointActivity.this, "图传信号异常", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (!isCanTakeOff) {
+            Toast.makeText(Evo2WayPointActivity.this, "飞行器不能起飞", Toast.LENGTH_LONG).show();
             return false;
         }
 
