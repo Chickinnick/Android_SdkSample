@@ -39,6 +39,7 @@ import com.autel.util.log.AutelLog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 public class Evo2WayPointActivity extends AppCompatActivity implements View.OnClickListener {
@@ -48,7 +49,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
     private EvoBattery battery;
     private AutelRemoteController remoteController;
     private MissionManager missionManager;
-    private float lowBatteryPercent = 25f;
+    private float lowBatteryPercent = 15f;
     private boolean isBatteryOk = false; //当前电量是否合适
     private boolean isCompassOk = false; //当前指南针状态是否OK
     private boolean isImuOk = false; //当前IMU是否OK
@@ -103,6 +104,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
             battery.setBatteryStateListener(new CallbackWithOneParam<EvoBatteryInfo>() {
                 @Override
                 public void onSuccess(EvoBatteryInfo batteryState) {
+                    AutelLog.d(" batteryState "+batteryState.getResidualTime());
                     isBatteryOk = batteryState.getRemainingPercent() > lowBatteryPercent;
                 }
 
@@ -168,6 +170,9 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         autelMission.VerticalFOV = 53.6f; //相机实时心跳数据读取
         autelMission.HorizontalFOV = 68.0f; //相机实时心跳数据读取
         autelMission.PhotoIntervalMin = 1020;
+        autelMission.MissionName = "Mission_1";
+        autelMission.GUID = UUID.randomUUID().toString().replace("-", "");
+
 
         List<Evo2Waypoint> wpList = new ArrayList<>();
 
