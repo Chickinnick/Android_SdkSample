@@ -104,7 +104,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
             battery.setBatteryStateListener(new CallbackWithOneParam<EvoBatteryInfo>() {
                 @Override
                 public void onSuccess(EvoBatteryInfo batteryState) {
-                    AutelLog.d(" batteryState "+batteryState.getResidualTime());
+                    AutelLog.d(" batteryState "+batteryState.getRemainingPercent());
                     isBatteryOk = batteryState.getRemainingPercent() > lowBatteryPercent;
                 }
 
@@ -181,16 +181,16 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         cruiserWaypoint1.wSpeed = 5; //速度（单位m/s）
         cruiserWaypoint1.poiIndex = -1; //关联的兴趣点id
         cruiserWaypoint1.flyTime = 0; //飞行时间（单位s）
-        cruiserWaypoint1.hoverTime = 0; //飞越时0，悬停则传入具体时间（单位s）
+        cruiserWaypoint1.hoverTime = 10; //飞越时0，悬停则传入具体时间（单位s）
         cruiserWaypoint1.flyDistance = 0;//飞行距离（单位m）
         cruiserWaypoint1.headingMode = WaypointHeadingMode.CUSTOM_DIRECTION; //航向沿航线
-        cruiserWaypoint1.waypointType = WaypointType.STANDARD; //航点类型 飞越（STANDARD）或者悬停（HOVER）
+        cruiserWaypoint1.waypointType = WaypointType.HOVER; //航点类型 飞越（STANDARD）或者悬停（HOVER）
         //航点1为飞越，可添加0个或1个相机动作
         List<WaypointAction> list1 = new ArrayList<>();
         //添加相机动作
         WaypointAction action1 = new WaypointAction();
         action1.actionType = MissionActionType.START_RECORD; //开始录像
-        action1.parameters = new int[]{0, 180, 0, 0, 0, 0, 0, 20, 0, 0}; //设置录像参数(参数1：云台pitch角度 参数2：机头朝向角度 余下参数根据相机动作不同而不同)
+        action1.parameters = new int[]{45, 50, 0, 0, 0, 0, 0, 20, 0, 0}; //设置录像参数(参数1：云台pitch角度 参数2：机头朝向角度 余下参数根据相机动作不同而不同)
         list1.add(action1);
         cruiserWaypoint1.actions = list1;
         wpList.add(cruiserWaypoint1);
@@ -209,13 +209,13 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         //添加相机动作1 定实拍 (定时拍间隔为2s，定实拍时长为40s）
         WaypointAction point2Action1 = new WaypointAction();
         point2Action1.actionType = MissionActionType.START_TIME_LAPSE_SHOOT;
-        point2Action1.parameters = new int[]{-45, 180, 2, 40, 0, 0, 0, 20, 0, 0};
+        point2Action1.parameters = new int[]{-45, 160, 2, 40, 0, 0, 0, 20, 0, 0};
         list2.add(point2Action1);
         wpList.add(cruiserWaypoint2);
         //添加相机动作2 开始录像 (录像时长为60s)
         WaypointAction point2Action2 = new WaypointAction();
         point2Action2.actionType = MissionActionType.START_RECORD;
-        point2Action2.parameters = new int[]{-23, 180, 0, 0, 0, 60, 0, 20, 0, 0};
+        point2Action2.parameters = new int[]{-23, 170, 0, 0, 0, 60, 0, 20, 0, 0};
         list2.add(point2Action2);
 
         cruiserWaypoint2.actions = list2;
@@ -233,7 +233,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         List<WaypointAction> list3 = new ArrayList<>();
         WaypointAction point3Action1 = new WaypointAction();
         point3Action1.actionType = MissionActionType.TAKE_PHOTO; //拍照
-        point3Action1.parameters = new int[]{0, 180, 0, 0, 0, 0, 0, 20, 0, 0};
+        point3Action1.parameters = new int[]{0, 200, 0, 0, 0, 0, 0, 20, 0, 0};
         list3.add(point3Action1);
         cruiserWaypoint3.actions = list3;
         wpList.add(cruiserWaypoint3);
@@ -250,7 +250,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         List<WaypointAction> list4 = new ArrayList<>();
         WaypointAction point4Action1 = new WaypointAction();
         point4Action1.actionType = MissionActionType.START_TIME_LAPSE_SHOOT; //定时拍照(2s间隔)
-        point4Action1.parameters = new int[]{0, 180, 2, 0, 0, 0, 0, 20, 0, 0};
+        point4Action1.parameters = new int[]{0, 210, 2, 0, 0, 0, 0, 20, 0, 0};
         list4.add(point4Action1);
         cruiserWaypoint4.actions = list4;
         wpList.add(cruiserWaypoint4);
@@ -267,7 +267,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         List<WaypointAction> list5 = new ArrayList<>();
         WaypointAction point5Action1 = new WaypointAction();
         point5Action1.actionType = MissionActionType.START_DISTANCE_SHOOT; //定距拍照(10m间隔)
-        point5Action1.parameters = new int[]{0, 180, 0, 0, 10, 0, 0, 20, 0, 0};
+        point5Action1.parameters = new int[]{0, 220, 0, 0, 10, 0, 0, 20, 0, 0};
         list5.add(point5Action1);
         cruiserWaypoint5.actions = list5;
         wpList.add(cruiserWaypoint5);
@@ -284,7 +284,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         List<WaypointAction> list6 = new ArrayList<>();
         WaypointAction point6Action1 = new WaypointAction();
         point6Action1.actionType = MissionActionType.START_RECORD; //开始录像
-        point6Action1.parameters = new int[]{0, 180, 0, 0, 0, 0, 0, 20, 0, 0};
+        point6Action1.parameters = new int[]{0, 250, 0, 0, 0, 0, 0, 20, 0, 0};
         list6.add(point6Action1);
         cruiserWaypoint6.actions = list6;
         wpList.add(cruiserWaypoint6);
@@ -301,7 +301,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         List<WaypointAction> list7 = new ArrayList<>();
         WaypointAction point7Action1 = new WaypointAction();
         point7Action1.actionType = MissionActionType.STOP_RECORD; //结束录像
-        point7Action1.parameters = new int[]{0, 180, 0, 0, 0, 0, 0, 20, 0, 0};
+        point7Action1.parameters = new int[]{30, 270, 0, 0, 0, 0, 0, 20, 0, 0};
         list7.add(point7Action1);
         cruiserWaypoint7.actions = list7;
         wpList.add(cruiserWaypoint7);
