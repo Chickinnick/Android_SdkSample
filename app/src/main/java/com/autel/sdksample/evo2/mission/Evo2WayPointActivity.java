@@ -173,7 +173,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         autelMission.MissionName = "Mission_1";
         autelMission.GUID = UUID.randomUUID().toString().replace("-", "");
 
-        autelMission.missionAction = 1;
+        autelMission.missionAction = 1;//1-飞机与当前航点和下一个航点在一条直线上不减速飞行,0-正常飞行
         List<Evo2Waypoint> wpList = new ArrayList<>();
 
         //航点1（动作：飞越）
