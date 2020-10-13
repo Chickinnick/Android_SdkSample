@@ -14,8 +14,8 @@ import com.autel.common.product.AutelProductType;
 import com.autel.sdk.Autel;
 import com.autel.sdk.ProductConnectListener;
 import com.autel.sdk.product.BaseProduct;
-import com.autel.sdksample.evo2.EVO2Layout;
 import com.autel.sdksample.evo.G2Layout;
+import com.autel.sdksample.evo2.EVO2Layout;
 import com.autel.sdksample.premium.XStarPremiumLayout;
 import com.autel.sdksample.util.FileUtils;
 import com.autel.sdksample.xstar.XStarLayout;
@@ -40,7 +40,7 @@ public class ProductActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
-        setContentView(createView(AutelProductType.EVO));
+        setContentView(createView(AutelProductType.EVO_2));
         Log.v("productType", "ProductActivity onCreate ");
         //*/
         Autel.setProductConnectListener(new ProductConnectListener() {
@@ -107,7 +107,7 @@ public class ProductActivity extends AppCompatActivity {
                 return new XStarPremiumLayout(this).getLayout();
 
         }
-        return new XStarLayout(this).getLayout();
+        return new EVO2Layout(this).getLayout();
     }
 
     public void onResume() {

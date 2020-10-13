@@ -15,10 +15,8 @@ import com.autel.common.mission.OrbitFinishedAction;
 import com.autel.common.mission.xstar.OrbitMission;
 import com.autel.sdksample.R;
 import com.autel.sdksample.base.mission.AutelLatLng;
-import com.autel.sdksample.base.mission.MapActivity;
 import com.autel.sdksample.base.mission.MapOperator;
 import com.autel.sdksample.base.mission.adapter.OrbitFinishActionAdapter;
-import com.autel.sdksample.base.mission.fragment.MissionFragment;
 import com.autel.sdksample.base.mission.fragment.OrbitMissionFragment;
 
 

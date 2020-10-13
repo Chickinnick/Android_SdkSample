@@ -8,7 +8,6 @@ import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 
-
 import com.autel.sdksample.R;
 
 import java.util.Locale;

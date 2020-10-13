@@ -1,29 +1,12 @@
 package com.autel.sdksample.base.mission.fragment;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.EditText;
 
-import com.autel.common.mission.AutelCoordinate3D;
-import com.autel.common.mission.AutelMission;
 import com.autel.common.mission.xstar.Waypoint;
-import com.autel.common.mission.xstar.WaypointFinishedAction;
-import com.autel.common.mission.xstar.WaypointMission;
-import com.autel.sdksample.R;
 import com.autel.sdksample.base.mission.AutelLatLng;
-import com.autel.sdksample.base.mission.MapActivity;
 import com.autel.sdksample.base.mission.MapOperator;
 import com.autel.sdksample.base.mission.MapRectifyUtil;
-import com.autel.sdksample.base.mission.adapter.WaypointFinishActionAdapter;
 import com.autel.sdksample.base.mission.widget.WaypointSettingDialog;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public abstract class WaypointMissionFragment extends MissionFragment {

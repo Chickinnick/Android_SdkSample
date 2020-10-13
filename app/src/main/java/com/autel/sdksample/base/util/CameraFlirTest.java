@@ -7,15 +7,15 @@ import android.util.Log;
 
 import com.autel.common.CallbackWithNoParam;
 import com.autel.common.CallbackWithOneParam;
+import com.autel.common.error.AutelError;
+import com.autel.internal.camera.AutelFlirDuo;
+import com.autel.internal.camera.AutelFlirDuoR;
 import com.autel.internal.sdk.camera.flir.FLIRDisplayMode;
 import com.autel.internal.sdk.camera.flir.FLIRIRMSXSetting;
 import com.autel.internal.sdk.camera.flir.FLIRPhotoSetting;
 import com.autel.internal.sdk.camera.flir.FLIRRecordSetting;
 import com.autel.internal.sdk.camera.flir.IRColorMode;
-import com.autel.common.error.AutelError;
 import com.autel.internal.sdk.camera.flirInternal.FLIRRadiometrySetting;
-import com.autel.internal.camera.AutelFlirDuo;
-import com.autel.internal.camera.AutelFlirDuoR;
 
 
 public class CameraFlirTest {

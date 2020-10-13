@@ -7,7 +7,6 @@ import com.autel.common.error.AutelError;
 import com.autel.sdk.gimbal.AutelGimbal;
 import com.autel.sdk.gimbal.XStarGimbal;
 import com.autel.sdk.product.BaseProduct;
-import com.autel.sdk.product.XStarAircraft;
 import com.autel.sdk.product.XStarPremiumAircraft;
 import com.autel.sdksample.R;
 import com.autel.sdksample.base.gimbal.GimbalActivity;

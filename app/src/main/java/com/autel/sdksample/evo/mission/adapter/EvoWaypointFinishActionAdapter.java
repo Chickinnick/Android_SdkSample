@@ -3,7 +3,6 @@ package com.autel.sdksample.evo.mission.adapter;
 import android.content.Context;
 
 import com.autel.common.mission.evo.EvoWaypointFinishedAction;
-import com.autel.common.mission.xstar.WaypointFinishedAction;
 import com.autel.sdksample.base.adapter.SelectorAdapter;
 
 public class EvoWaypointFinishActionAdapter extends SelectorAdapter<EvoWaypointFinishedAction> {

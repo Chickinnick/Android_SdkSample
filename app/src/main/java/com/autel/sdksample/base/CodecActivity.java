@@ -1,6 +1,7 @@
 package com.autel.sdksample.base;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -121,39 +122,37 @@ public class CodecActivity extends BaseActivity<AutelCodec> {
                 isCodecing = true;
 
                 final TextView logTV = new TextView(CodecActivity.this);
+                AutelCodecView autelCodecView = new AutelCodecView(CodecActivity.this);
                 content_layout.setOnClickListener(null);
                 content_layout.setVisibility(View.VISIBLE);
-                content_layout.addView(logTV);
+                content_layout.addView(autelCodecView);
                 if (null != mController) {
                     mController.setCodecListener(new AutelCodecListener() {
                         @Override
                         public void onFrameStream(final byte[] videoBuffer, final boolean isIFrame, final int size, final long pts) {
-                            logTV.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    logTV.setText("isValid == " + (videoBuffer.length == size) + "\nisIFrame == " + isIFrame + "\nsize == " + size + "\npts == " + pts);
-                                }
-                            });
+                            Log.d("onFrameStream"," onFrameStream size "+size);
+                            if(null == videoBuffer) return;
+                            logOut("isValid == " + (videoBuffer.length == size) + "\nisIFrame == " + isIFrame + "\nsize == " + size + "\npts == " + pts);
                         }
 
                         @Override
                         public void onCanceled() {
-                            logTV.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    logTV.setText("onCandeled");
-                                }
-                            });
+//                            logTV.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+                                    logOut("onCandeled");
+//                                }
+//                            });
                         }
 
                         @Override
                         public void onFailure(final AutelError error) {
-                            logTV.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    logTV.setText(error.getDescription());
-                                }
-                            });
+//                            logTV.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+                                    logOut(error.getDescription());
+//                                }
+//                            });
                         }
                     }, null);
                 }

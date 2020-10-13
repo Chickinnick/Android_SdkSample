@@ -17,7 +17,6 @@ import com.autel.sdk.gimbal.AutelGimbal;
 import com.autel.sdk.gimbal.EvoGimbal;
 import com.autel.sdk.product.BaseProduct;
 import com.autel.sdk.product.Evo2Aircraft;
-import com.autel.sdk.product.EvoAircraft;
 import com.autel.sdksample.R;
 import com.autel.sdksample.base.gimbal.GimbalActivity;
 import com.autel.sdksample.evo.adapter.GimbalAxisAdapter;

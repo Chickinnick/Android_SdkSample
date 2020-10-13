@@ -61,6 +61,7 @@
             android:screenOrientation="landscape" />
         <activity android:name=".base.BatteryActivity" />
         <activity android:name=".base.album.AlbumActivity" />
+        <activity android:name=".rtk.Evo2RTKActivity" />
         <activity
             android:name=".base.mission.MissionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

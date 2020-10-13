@@ -8,7 +8,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-
 import com.autel.sdksample.R;
 import com.autel.sdksample.evo.mission.bean.MissionFileBean;
 

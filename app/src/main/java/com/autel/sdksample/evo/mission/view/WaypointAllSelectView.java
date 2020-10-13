@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.autel.sdksample.R;
 import com.autel.sdksample.evo.mission.bean.MissionConstant;
 import com.autel.sdksample.evo.mission.bean.WaypointAdvanceDataBean;
-import com.autel.sdksample.evo.mission.util.AutelConfigManager;
 import com.autel.sdksample.evo.mission.util.TransformUtils;
 
 

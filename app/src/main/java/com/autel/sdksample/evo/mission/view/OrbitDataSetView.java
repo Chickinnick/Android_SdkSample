@@ -13,7 +13,6 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-
 import com.autel.sdksample.R;
 import com.autel.sdksample.evo.mission.bean.AdvancedItemEnum;
 import com.autel.sdksample.evo.mission.bean.MissionConstant;

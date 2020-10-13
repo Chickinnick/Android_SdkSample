@@ -1,8 +1,6 @@
 package com.autel.sdksample.premium;
 
 import com.autel.sdk.product.BaseProduct;
-import com.autel.sdk.product.XStarAircraft;
-import com.autel.sdk.product.XStarPremiumAircraft;
 import com.autel.sdk.remotecontroller.AutelRemoteController;
 import com.autel.sdksample.R;
 import com.autel.sdksample.base.RemoteControllerActivity;

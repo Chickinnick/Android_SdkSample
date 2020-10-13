@@ -3,7 +3,6 @@ package com.autel.sdksample.evo.mission.bean;
 import com.autel.common.mission.AutelCoordinate3D;
 import com.autel.sdksample.base.mission.AutelLatLng;
 import com.autel.sdksample.base.mission.MapRectifyUtil;
-import com.autel.sdksample.evo.mission.util.AutelConfigManager;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 

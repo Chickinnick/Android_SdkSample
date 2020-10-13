@@ -9,12 +9,9 @@ import com.autel.sdksample.base.CodecActivity;
 import com.autel.sdksample.base.album.AlbumActivity;
 import com.autel.sdksample.base.camera.CameraActivity;
 import com.autel.sdksample.base.mission.MissionActivity;
-import com.autel.sdksample.evo.G2BatteryActivity;
-import com.autel.sdksample.evo.G2DspActivity;
-import com.autel.sdksample.evo.G2FlyControllerActivity;
-import com.autel.sdksample.evo.G2GimbalActivity;
 import com.autel.sdksample.evo.G2RemoteControllerActivity;
 import com.autel.sdksample.evo2.mission.Evo2MissionActivity;
+import com.autel.sdksample.rtk.Evo2RTKActivity;
 
 /**
  * Created by A16343 on 2017/9/5.
@@ -95,6 +92,12 @@ public class EVO2Layout {
             @Override
             public void onClick(View v) {
                 mContext.startActivity(new Intent(mContext, AlbumActivity.class));
+            }
+        });
+        mLayout.findViewById(R.id.rtktest).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContext.startActivity(new Intent(mContext, Evo2RTKActivity.class));
             }
         });
     }

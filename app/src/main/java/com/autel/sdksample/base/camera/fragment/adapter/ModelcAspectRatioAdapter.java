@@ -7,8 +7,6 @@ import com.autel.common.camera.XT706.DisplayMode;
 import com.autel.common.camera.media.PhotoAspectRatio;
 import com.autel.sdksample.base.adapter.SelectorAdapter;
 
-import java.util.List;
-
 public class ModelcAspectRatioAdapter extends SelectorAdapter<String> {
 
     public ModelcAspectRatioAdapter(Context context) {

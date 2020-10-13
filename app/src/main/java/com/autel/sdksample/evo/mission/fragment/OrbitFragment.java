@@ -13,7 +13,6 @@ import com.autel.common.remotecontroller.RemoteControllerCommandStickMode;
 import com.autel.sdksample.R;
 import com.autel.sdksample.evo.mission.bean.MapConstant;
 import com.autel.sdksample.evo.mission.bean.OrbitAdvanceDataBean;
-import com.autel.sdksample.evo.mission.util.AutelConfigManager;
 import com.autel.sdksample.evo.mission.view.OrbitDataSetView;
 import com.autel.sdksample.evo.mission.view.OrbitExecuteView;
 import com.autel.sdksample.evo.mission.view.OrbitPositionSetView;

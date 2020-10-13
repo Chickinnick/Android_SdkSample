@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 
 import com.autel.common.mission.AutelCoordinate3D;
@@ -24,16 +22,6 @@ import com.autel.sdksample.base.mission.MapActivity;
 import com.autel.sdksample.base.mission.MapOperator;
 import com.autel.sdksample.base.mission.adapter.WaypointFinishActionAdapter;
 import com.autel.sdksample.base.mission.fragment.WaypointMissionFragment;
-import com.autel.sdksample.base.mission.widget.WaypointSettingDialog;
-import com.autel.sdksample.evo.mission.bean.MissionFileBean;
-import com.autel.sdksample.evo.mission.bean.WaypointAdvanceDataBean;
-import com.autel.sdksample.evo.mission.view.WaypointAllSelectView;
-import com.autel.sdksample.evo.mission.view.WaypointCreateOrLoadView;
-import com.autel.sdksample.evo.mission.view.WaypointExecuteView;
-import com.autel.sdksample.evo.mission.view.WaypointLoadView;
-import com.autel.sdksample.evo.mission.view.WaypointSetView;
-import com.autel.sdksample.evo.mission.widge.MissionDropSelectView;
-import com.autel.sdksample.evo.mission.widge.VisualDialogToast;
 
 import java.util.ArrayList;
 import java.util.List;

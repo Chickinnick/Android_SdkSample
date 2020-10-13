@@ -13,18 +13,14 @@ import android.widget.Spinner;
 
 import com.autel.common.mission.AutelCoordinate3D;
 import com.autel.common.mission.AutelMission;
-import com.autel.common.mission.evo.EvoOrbitMission;
 import com.autel.common.mission.evo.EvoWaypoint;
 import com.autel.common.mission.evo.EvoWaypointFinishedAction;
 import com.autel.common.mission.evo.EvoWaypointMission;
 import com.autel.common.mission.xstar.Waypoint;
-import com.autel.common.mission.xstar.WaypointFinishedAction;
-import com.autel.common.mission.xstar.WaypointMission;
 import com.autel.sdksample.R;
 import com.autel.sdksample.base.mission.AutelLatLng;
 import com.autel.sdksample.base.mission.MapActivity;
 import com.autel.sdksample.base.mission.MapOperator;
-import com.autel.sdksample.base.mission.adapter.WaypointFinishActionAdapter;
 import com.autel.sdksample.base.mission.fragment.WaypointMissionFragment;
 import com.autel.sdksample.evo.mission.adapter.EvoWaypointFinishActionAdapter;
 

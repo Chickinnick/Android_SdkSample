@@ -1,25 +1,15 @@
 package com.autel.sdksample.evo;
 
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.autel.common.CallbackWithNoParam;
-import com.autel.common.CallbackWithOneParam;
-import com.autel.common.error.AutelError;
 import com.autel.common.gimbal.GimbalAxisType;
-import com.autel.common.gimbal.evo.GimbalAngleData;
-import com.autel.common.gimbal.evo.GimbalAngleRange;
-import com.autel.common.gimbal.evo.GimbalAngleSpeed;
-import com.autel.common.gimbal.evo.EvoAngleInfo;
 import com.autel.sdk.gimbal.AutelGimbal;
 import com.autel.sdk.gimbal.EvoGimbal;
 import com.autel.sdk.product.BaseProduct;
 import com.autel.sdk.product.EvoAircraft;
 import com.autel.sdksample.R;
 import com.autel.sdksample.base.gimbal.GimbalActivity;
-import com.autel.sdksample.evo.adapter.GimbalAxisAdapter;
 
 /**
  * Created by A16343 on 2017/9/6.

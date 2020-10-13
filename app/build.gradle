@@ -54,27 +54,28 @@ configurations.all {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile  'com.google.android.gms:play-services-maps:10.2.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.1.2'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    testCompile 'junit:junit:4.12'
-    compile('com.squareup.okhttp3:okhttp:3.8.1')
-    implementation 'com.autel:autel-sdk:2.0.11.78@aar'
-//    api(name: "autel-sdk-2.0.11-evo-release-20200624.030650-6", ext: "aar") {
-//        exclude module: 'okio'
-//        exclude module: 'okhttp'
-//    }
+    implementation 'com.android.support:appcompat-v7:25.3.1'
+    implementation  'com.google.android.gms:play-services-maps:10.2.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:multidex:1.0.1'
+    implementation 'com.android.support:recyclerview-v7:25.3.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.2'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    testImplementation 'junit:junit:4.12'
+    implementation('com.squareup.okhttp3:okhttp:3.8.1')
+//    implementation 'com.autel:autel-sdk:2.0.11.78@aar'
+    api(name: "autel-sdk-2.0.11-evo-release-20201013.082513-10", ext: "aar") {
+        exclude module: 'okio'
+        exclude module: 'okhttp'
+    }
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //3D地图so及jar
     implementation 'com.amap.api:3dmap:latest.integration'
     //定位功能
     implementation 'com.amap.api:location:latest.integration'
+    implementation(name:'libqxwz_release_v1.1.0',ext:'aar')
 }

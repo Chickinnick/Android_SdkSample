@@ -3,7 +3,6 @@ package com.autel.sdksample.base.camera.fragment.adapter;
 import android.content.Context;
 
 import com.autel.common.camera.media.CameraAperture;
-import com.autel.common.camera.media.PhotoStyleType;
 import com.autel.sdksample.base.adapter.SelectorAdapter;
 
 

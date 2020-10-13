@@ -1,7 +1,6 @@
 package com.autel.sdksample.premium;
 
 import com.autel.sdk.battery.AutelBattery;
-import com.autel.sdk.battery.XStarBattery;
 import com.autel.sdk.product.BaseProduct;
 import com.autel.sdk.product.XStarPremiumAircraft;
 import com.autel.sdksample.xstar.XStarBatteryActivity;

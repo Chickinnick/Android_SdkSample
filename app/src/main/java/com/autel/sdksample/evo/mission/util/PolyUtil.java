@@ -22,9 +22,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import static com.autel.sdksample.evo.mission.util.MathUtil.*;
+import static com.autel.sdksample.evo.mission.util.MathUtil.EARTH_RADIUS;
+import static com.autel.sdksample.evo.mission.util.MathUtil.clamp;
+import static com.autel.sdksample.evo.mission.util.MathUtil.hav;
+import static com.autel.sdksample.evo.mission.util.MathUtil.havDistance;
+import static com.autel.sdksample.evo.mission.util.MathUtil.havFromSin;
+import static com.autel.sdksample.evo.mission.util.MathUtil.inverseMercator;
+import static com.autel.sdksample.evo.mission.util.MathUtil.mercator;
+import static com.autel.sdksample.evo.mission.util.MathUtil.sinFromHav;
+import static com.autel.sdksample.evo.mission.util.MathUtil.sinSumFromHav;
+import static com.autel.sdksample.evo.mission.util.MathUtil.wrap;
 import static com.autel.sdksample.evo.mission.util.SphericalUtil.computeDistanceBetween;
-import static java.lang.Math.*;
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+import static java.lang.Math.tan;
+import static java.lang.Math.toRadians;
 
 public class PolyUtil {
 

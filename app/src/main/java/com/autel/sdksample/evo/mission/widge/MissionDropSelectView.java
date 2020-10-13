@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-
 import com.autel.sdksample.R;
 import com.autel.sdksample.evo.mission.bean.AdvancedItemEnum;
 import com.autel.sdksample.evo.mission.bean.ListItemDecoration;

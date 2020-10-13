@@ -16,7 +16,6 @@ import com.autel.sdk.dsp.AutelDsp;
 import com.autel.sdk.dsp.EvoDsp;
 import com.autel.sdk.product.BaseProduct;
 import com.autel.sdk.product.Evo2Aircraft;
-import com.autel.sdk.product.EvoAircraft;
 import com.autel.sdksample.R;
 import com.autel.sdksample.base.DspActivity;
 import com.autel.sdksample.evo.adapter.BandModeAdapter;

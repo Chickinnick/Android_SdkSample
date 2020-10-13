@@ -6,8 +6,6 @@ import com.autel.common.camera.CameraProduct;
 import com.autel.common.camera.media.ExposureMode;
 import com.autel.sdksample.base.adapter.SelectorAdapter;
 
-import java.util.List;
-
 public class ModelcExposureModeAdapter extends SelectorAdapter<ExposureMode> {
     public ModelcExposureModeAdapter(Context context) {
         super(context);

@@ -2,7 +2,6 @@ package com.autel.sdksample.base.camera.fragment.adapter;
 
 import android.content.Context;
 
-
 import com.autel.common.camera.media.LensFocusMode;
 import com.autel.sdksample.base.adapter.SelectorAdapter;
 

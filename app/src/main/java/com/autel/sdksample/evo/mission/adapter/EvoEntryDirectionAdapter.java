@@ -2,8 +2,6 @@ package com.autel.sdksample.evo.mission.adapter;
 
 import android.content.Context;
 
-import com.autel.common.mission.evo.EvoWaypointFinishedAction;
-import com.autel.common.mission.evo.OrbitEntryDirection;
 import com.autel.common.mission.evo.OrbitEntryDirection;
 import com.autel.sdksample.base.adapter.SelectorAdapter;
 
