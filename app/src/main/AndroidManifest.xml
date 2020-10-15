@@ -54,7 +54,9 @@
         <activity android:name=".premium.XStarPremiumDspActivity" />
         <activity android:name=".premium.XStarPremiumBatteryActivity" />
         <activity android:name=".evo2.mission.Evo2MissionActivity" />
-        <activity android:name=".evo2.mission.Evo2WayPointActivity" />
+        <activity
+            android:name=".evo2.mission.Evo2WayPointActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".base.camera.CameraActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
