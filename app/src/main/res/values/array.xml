@@ -64,6 +64,11 @@
         <item>@string/fc_led_pilot_lamp_all_on</item>
     </string-array>
 
+    <string-array name="rtk_coordinate_type">
+        <item>WGS84</item>
+        <item>CGCS2000</item>
+    </string-array>
+
     <string-array name="camera_color_type">
         <item>@string/camera_color_none</item>
         <item>@string/camera_color_vivid</item>

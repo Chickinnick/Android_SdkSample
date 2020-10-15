@@ -50,10 +50,6 @@ public abstract class RtkBaseActivity extends BaseActivity<AutelFlyController> {
         });
     }
 
-    @Override
-    protected void initUi() {
-
-    }
 
     @Override
     protected void onDestroy() {
