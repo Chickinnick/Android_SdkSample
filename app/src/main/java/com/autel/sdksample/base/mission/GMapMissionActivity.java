@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.autel.common.flycontroller.AttitudeInfo;
 import com.autel.sdksample.R;
@@ -134,6 +135,7 @@ public class GMapMissionActivity extends MapActivity {
     protected void updateAircraftLocation(double lat, double lot, final AttitudeInfo info) {
         AutelLatLng latLng = MapRectifyUtil.wgs2gcj(new AutelLatLng(lat, lot));
         final LatLng lng = new LatLng(latLng.latitude, latLng.longitude);
+        Log.d("YAW","yaw:"+info.getYaw()+"");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -219,6 +221,7 @@ public class GMapMissionActivity extends MapActivity {
             if (degree < 0) {
                 degree = degree + 360;
             }
+            Log.d("YAW","drawDroneMarker "+degree+" degree");
             if (mDroneMarker != null) {
                 if (mGmap.getCameraPosition() != null) {
                     mDroneMarker.setRotation((float) degree);

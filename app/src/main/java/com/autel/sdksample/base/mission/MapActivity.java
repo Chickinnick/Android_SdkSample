@@ -27,14 +27,14 @@ import android.widget.TextView;
 import com.autel.common.CallbackWithOneParam;
 import com.autel.common.error.AutelError;
 import com.autel.common.flycontroller.AttitudeInfo;
-import com.autel.common.flycontroller.FlyControllerInfo;
+import com.autel.common.flycontroller.evo.EvoFlyControllerInfo;
 import com.autel.common.mission.AutelCoordinate3D;
 import com.autel.common.mission.AutelMission;
-import com.autel.sdk.flycontroller.XStarFlyController;
+import com.autel.internal.flycontroller.evo.bean.G2FlyControllerInfoImpl;
+import com.autel.sdk.flycontroller.Evo2FlyController;
 import com.autel.sdk.mission.MissionManager;
 import com.autel.sdk.product.BaseProduct;
-import com.autel.sdk.product.XStarAircraft;
-import com.autel.sdk.product.XStarPremiumAircraft;
+import com.autel.sdk.product.Evo2Aircraft;
 import com.autel.sdksample.R;
 import com.autel.sdksample.TestApplication;
 import com.autel.sdksample.base.mission.fragment.MissionFragment;
@@ -74,7 +74,7 @@ public abstract class MapActivity extends FragmentActivity implements MapOperato
 
     private LocationChangeListener locationChangeListener;
     private WaypointHeightListener waypointHeightListener;
-    XStarFlyController xStarFlyController;
+    Evo2FlyController xStarFlyController;
     boolean flyInfoShow;
     volatile long flyInfoNotify;
     long clickStamp = 0;
@@ -91,7 +91,7 @@ public abstract class MapActivity extends FragmentActivity implements MapOperato
     public void onDestroy() {
         super.onDestroy();
         if (null != xStarFlyController) {
-            xStarFlyController.setFlyControllerInfoListener(null);
+//            xStarFlyController.setFlyControllerInfoListener(null);
         }
     }
 
@@ -223,23 +223,26 @@ public abstract class MapActivity extends FragmentActivity implements MapOperato
         if (null != baseProduct) {
             switch (baseProduct.getType()) {
                 case X_STAR:
-                    xStarFlyController = ((XStarAircraft) baseProduct).getFlyController();
+//                    xStarFlyController = ((XStarAircraft) baseProduct).getFlyController();
                     break;
                 case PREMIUM:
-                    xStarFlyController = ((XStarPremiumAircraft) baseProduct).getFlyController();
+//                    xStarFlyController = ((XStarPremiumAircraft) baseProduct).getFlyController();
+                    break;
+                case EVO_2:
+                    xStarFlyController = ((Evo2Aircraft) baseProduct).getFlyController();
                     break;
             }
             if (null != xStarFlyController) {
-                xStarFlyController.setFlyControllerInfoListener(new CallbackWithOneParam<FlyControllerInfo>() {
+                xStarFlyController.setFlyControllerInfoListener(new CallbackWithOneParam<EvoFlyControllerInfo>() {
                     @Override
-                    public void onSuccess(FlyControllerInfo flyControllerInfo) {
+                    public void onSuccess(EvoFlyControllerInfo flyControllerInfo) {
                         if (System.currentTimeMillis() - flyInfoNotify > 1000) {
                             flyInfoNotify = System.currentTimeMillis();
                             Message msg = handler.obtainMessage();
                             msg.obj = flyControllerInfo;
                             handler.sendMessage(msg);
-                            if (null != flyControllerInfo.getGPSInfo()) {
-                                AutelCoordinate3D coord3D = flyControllerInfo.getGPSInfo().getCoordinate();
+                            if (null != flyControllerInfo.getGpsInfo()) {
+                                AutelCoordinate3D coord3D = new AutelCoordinate3D(flyControllerInfo.getGpsInfo().getLatitude(),flyControllerInfo.getGpsInfo().getLongitude(),flyControllerInfo.getGpsInfo().getAltitude());
                                 if (null != coord3D) {
                                     updateAircraftLocation(coord3D.getLatitude(), coord3D.getLongitude(), flyControllerInfo.getAttitudeInfo());
                                 }
@@ -400,11 +403,11 @@ public abstract class MapActivity extends FragmentActivity implements MapOperato
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            FlyControllerInfo flyControllerData = (FlyControllerInfo) msg.obj;
+            G2FlyControllerInfoImpl flyControllerData = (G2FlyControllerInfoImpl) msg.obj;
             if (flyInfoShow) {
                 flyControllerInfo.setText(flyControllerData.toString());
             }
-            flyModeInfo.setText("FlyMode : " + flyControllerData.getFlyControllerStatus().getFlyMode());
+            flyModeInfo.setText("FlyMode : " + flyControllerData.getFlyControllerStatus().getFlyMode()+"  yaw "+flyControllerData.getAttitudeInfo().getYaw());
         }
     };
 
