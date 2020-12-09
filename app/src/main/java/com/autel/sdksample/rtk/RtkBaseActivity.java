@@ -40,7 +40,7 @@ public abstract class RtkBaseActivity extends BaseActivity<AutelFlyController> {
             public void onSuccess(byte[] bytes) {
                 GGA = new String(bytes);
                 AutelLog.debug_i("RTK", "onSuccess data.len:" + GGA);
-                GGA = "$GPGGA,054514.000,2338.5260,N,11501.9686,E,1,7,1.27,89.2,M,-2.3,M,,*7F";
+//                GGA = "$GPGGA,054514.000,2338.5260,N,11501.9686,E,1,7,1.27,89.2,M,-2.3,M,,*7F";
             }
 
             @Override
