@@ -170,6 +170,7 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         autelMission.VerticalFOV = 53.6f; //相机实时心跳数据读取
         autelMission.HorizontalFOV = 68.0f; //相机实时心跳数据读取
         autelMission.PhotoIntervalMin = 1020;
+        autelMission.altitudeType = 1;//0-相对高度，1-海拔高度
         autelMission.MissionName = "Mission_1";
         autelMission.GUID = UUID.randomUUID().toString().replace("-", "");
 
