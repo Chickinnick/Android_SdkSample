@@ -2,20 +2,27 @@ package com.autel.sdksample.rtk;
 
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
+import com.autel.AutelNet2.dsp.controller.DspRFManager2;
 import com.autel.common.CallbackWithNoParam;
 import com.autel.common.CallbackWithOneParam;
+import com.autel.common.dsp.evo.AircraftRole;
 import com.autel.common.error.AutelError;
 import com.autel.common.flycontroller.AuthInfo;
 import com.autel.common.flycontroller.RTKSignalType;
 import com.autel.common.flycontroller.RtkCoordinateSystem;
+import com.autel.common.flycontroller.evo.EvoFlyControllerInfo;
 import com.autel.common.flycontroller.evo2.RTKInternal;
+import com.autel.common.mission.AutelCoordinate3D;
 import com.autel.sdksample.R;
 import com.autel.sdksample.base.camera.fragment.adapter.RtkCoordinateAdapter;
 import com.qxwz.sdk.configs.AccountInfo;
@@ -31,7 +38,6 @@ import com.qxwz.sdk.types.KeyType;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.amap.api.maps.model.BitmapDescriptorFactory.getContext;
 import static com.qxwz.sdk.core.Constants.QXWZ_SDK_CAP_ID_NOSR;
 import static com.qxwz.sdk.core.Constants.QXWZ_SDK_STAT_AUTH_SUCC;
 
@@ -48,6 +54,7 @@ public class Evo2RTKActivity extends RtkBaseActivity implements IRtcmSDKCallback
     private Switch mSwitch;
     Spinner coordinateSpinner;
     String coordinateSystem = "WGS84";
+    private EditText latitudeEditView, longitudeEditView, altitudeEditView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +64,9 @@ public class Evo2RTKActivity extends RtkBaseActivity implements IRtcmSDKCallback
 
     private void initView() {
 
-
+        latitudeEditView = (EditText) findViewById(R.id.lat);
+        longitudeEditView = (EditText) findViewById(R.id.lng);
+        altitudeEditView = (EditText) findViewById(R.id.alt);
         mSwitch = (Switch) findViewById(R.id.setUseRTKSwitch);
 
         mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -67,12 +76,12 @@ public class Evo2RTKActivity extends RtkBaseActivity implements IRtcmSDKCallback
                     flyController.setUseRTK(isChecked, new CallbackWithNoParam() {
                         @Override
                         public void onSuccess() {
-                            logOut("setUseRTK success "+isChecked );
+                            logOut("setUseRTK success " + isChecked);
                         }
 
                         @Override
                         public void onFailure(AutelError autelError) {
-                            logOut("setUseRTK onFailure" +autelError.getDescription());
+                            logOut("setUseRTK onFailure" + autelError.getDescription());
                         }
                     });
             }
@@ -87,7 +96,7 @@ public class Evo2RTKActivity extends RtkBaseActivity implements IRtcmSDKCallback
         List<String> list = new ArrayList<>();
         list.add("WGS84");
         list.add("CGCS2000");
-        coordinateSpinner.setAdapter(new RtkCoordinateAdapter(this,list));
+        coordinateSpinner.setAdapter(new RtkCoordinateAdapter(this, list));
         coordinateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -96,6 +105,62 @@ public class Evo2RTKActivity extends RtkBaseActivity implements IRtcmSDKCallback
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    public void setFrequency(View view) {
+        DspRFManager2.getInstance().bingAircraftToRemote(AircraftRole.SLAVER);
+    }
+
+    public void setBaseStationLocation(View view) {
+        if (TextUtils.isEmpty(latitudeEditView.getText()) || TextUtils.isEmpty(longitudeEditView.getText())
+                || TextUtils.isEmpty(altitudeEditView.getText())) {
+            Toast.makeText(this, "输入的值不能为空", Toast.LENGTH_SHORT);
+            return;
+        }
+        double lat = Double.parseDouble(latitudeEditView.getText().toString());
+        double lng = Double.parseDouble(longitudeEditView.getText().toString());
+        double alt = Double.parseDouble(altitudeEditView.getText().toString());
+        flyController.setBaseStationLocation(new AutelCoordinate3D(lat, lng, alt), new CallbackWithNoParam() {
+            @Override
+            public void onSuccess() {
+                logOut("setBaseStationLocation  onSuccess ");
+
+            }
+
+            @Override
+            public void onFailure(AutelError autelError) {
+                logOut("setBaseStationLocation  onFailure");
+
+            }
+        });
+    }
+
+    public void setBaseStationListener(View view) {
+        flyController.setFlyControllerInfoListener(new CallbackWithOneParam<EvoFlyControllerInfo>() {
+            @Override
+            public void onSuccess(EvoFlyControllerInfo evoFlyControllerInfo) {
+                logOut(evoFlyControllerInfo.getBaseStationInfo().toString());
+            }
+
+            @Override
+            public void onFailure(AutelError autelError) {
+
+            }
+        });
+    }
+
+    public void setBaseStationLocationListener(View view) {
+        flyController.setFlyControllerInfoListener(new CallbackWithOneParam<EvoFlyControllerInfo>() {
+            @Override
+            public void onSuccess(EvoFlyControllerInfo evoFlyControllerInfo) {
+                logOut(evoFlyControllerInfo.getBaseStationLocation().toString());
+            }
+
+            @Override
+            public void onFailure(AutelError autelError) {
 
             }
         });
@@ -243,7 +308,7 @@ public class Evo2RTKActivity extends RtkBaseActivity implements IRtcmSDKCallback
             flyController.getRtkRecvType(new CallbackWithOneParam<RTKSignalType>() {
                 @Override
                 public void onSuccess(RTKSignalType rtkSignalType) {
-                    logOut("rtkSignalType " +rtkSignalType);
+                    logOut("rtkSignalType " + rtkSignalType);
                 }
 
                 @Override
@@ -258,12 +323,12 @@ public class Evo2RTKActivity extends RtkBaseActivity implements IRtcmSDKCallback
             flyController.getRtkCoordinateSys(new CallbackWithOneParam<RtkCoordinateSystem>() {
                 @Override
                 public void onSuccess(RtkCoordinateSystem rtkCoordinateSystem) {
-                    logOut("getRtkCoordinateSys " +rtkCoordinateSystem);
+                    logOut("getRtkCoordinateSys " + rtkCoordinateSystem);
                 }
 
                 @Override
                 public void onFailure(AutelError autelError) {
-                    logOut("getRtkCoordinateSys onFailure" +autelError.getDescription());
+                    logOut("getRtkCoordinateSys onFailure" + autelError.getDescription());
                 }
             });
     }
@@ -273,12 +338,12 @@ public class Evo2RTKActivity extends RtkBaseActivity implements IRtcmSDKCallback
             flyController.getUseRTK(new CallbackWithOneParam<Boolean>() {
                 @Override
                 public void onSuccess(Boolean aBoolean) {
-                    logOut("getUseRTK " +aBoolean);
+                    logOut("getUseRTK " + aBoolean);
                 }
 
                 @Override
                 public void onFailure(AutelError autelError) {
-                    logOut("getUseRTK onFailure" +autelError.getDescription());
+                    logOut("getUseRTK onFailure" + autelError.getDescription());
                 }
             });
     }
@@ -291,11 +356,11 @@ public class Evo2RTKActivity extends RtkBaseActivity implements IRtcmSDKCallback
         } else if (coordinateSystem.equals("WGS84")) {
             coordSysIndex = 2;
         }
-        RtcmSDKManager.getInstance().setCoordSys(coordSysIndex,new IRtcmSDKSetCoordCallback(){
+        RtcmSDKManager.getInstance().setCoordSys(coordSysIndex, new IRtcmSDKSetCoordCallback() {
 
             @Override
             public void onResult(int i) {
-                logOut("setRtkCoordinateSys " +i);
+                logOut("setRtkCoordinateSys " + i);
             }
         });
     }

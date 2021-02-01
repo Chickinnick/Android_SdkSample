@@ -54,7 +54,7 @@ public abstract class DspActivity extends BaseActivity<AutelDsp> {
         dspRFList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedRFHz = (int) ((RFData) rfListAdapter.getItem(position)).frequency;
+                selectedRFHz = (int) ((RFData) rfListAdapter.getItem(position)).hz;
             }
 
             @Override
@@ -184,7 +184,7 @@ public abstract class DspActivity extends BaseActivity<AutelDsp> {
                 convertView = View.inflate(mContext, R.layout.spinner_item__rf_hz, null);
             }
 
-            ((TextView) convertView.findViewById(R.id.rfHz)).setText("" + rfData.get(position).frequency);
+            ((TextView) convertView.findViewById(R.id.rfHz)).setText("" + rfData.get(position).hz);
 
             return convertView;
         }
