@@ -20,13 +20,13 @@ public class ModelcExposureModeAdapter extends SelectorAdapter<ExposureMode> {
                 elementList.add(ExposureMode.ShutterPriority);
             }
             break;
-            case XT705:{
-                elementList.add(ExposureMode.Auto);
-                elementList.add(ExposureMode.Manual);
-                elementList.add(ExposureMode.ShutterPriority);
-                elementList.add(ExposureMode.AperturePriority);
-            }
-            break;
+//            case XT705:{
+//                elementList.add(ExposureMode.Auto);
+//                elementList.add(ExposureMode.Manual);
+//                elementList.add(ExposureMode.ShutterPriority);
+//                elementList.add(ExposureMode.AperturePriority);
+//            }
+//            break;
 
             default:
         }

@@ -3,6 +3,7 @@ package com.autel.sdksample.base;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
@@ -18,6 +19,7 @@ import com.autel.common.RangePair;
 import com.autel.common.error.AutelError;
 import com.autel.common.flycontroller.ARMWarning;
 import com.autel.common.flycontroller.CalibrateCompassStatus;
+import com.autel.common.flycontroller.FlightErrorState;
 import com.autel.common.flycontroller.FlyControllerParameterRangeManager;
 import com.autel.common.flycontroller.FlyControllerVersionInfo;
 import com.autel.common.flycontroller.LedPilotLamp;
@@ -471,9 +473,9 @@ public abstract class FlyControllerActivity extends BaseActivity<AutelFlyControl
     }
 
     public void takeOff(View view) {
-        mController.takeOff(new CallbackWithNoParam() {
+        mController.takeOff(new CallbackWithOneParam<Pair<Boolean, FlightErrorState>>() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(Pair<Boolean, FlightErrorState> booleanFlightErrorStatePair) {
                 logOut("takeOff onSuccess ");
             }
 

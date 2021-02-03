@@ -11,17 +11,13 @@ import android.util.Log;
 import android.view.View;
 
 import com.autel.AutelNet2.dsp.controller.DspRFManager2;
-import com.autel.AutelNet2.dsp.data.UserInfo;
 import com.autel.common.dsp.evo.AircraftRole;
 import com.autel.common.product.AutelProductType;
 import com.autel.sdk.Autel;
 import com.autel.sdk.ProductConnectListener;
 import com.autel.sdk.product.BaseProduct;
-import com.autel.sdksample.evo.G2Layout;
-import com.autel.sdksample.evo2.EVO2Layout;
-import com.autel.sdksample.premium.XStarPremiumLayout;
+import com.autel.sdksample.dragonfish.DFLayout;
 import com.autel.sdksample.util.FileUtils;
-import com.autel.sdksample.xstar.XStarLayout;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -43,7 +39,7 @@ public class ProductActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
-        setContentView(createView(AutelProductType.EVO_2));
+        setContentView(createView(AutelProductType.DRAGONFISH));
         Log.v("productType", "ProductActivity onCreate ");
         //*/
         Autel.setProductConnectListener(new ProductConnectListener() {
@@ -100,24 +96,24 @@ public class ProductActivity extends AppCompatActivity {
 
     private View createView(AutelProductType productType) {
         switch (productType) {
-            case X_STAR:
-                return new XStarLayout(this).getLayout();
-            case EVO:
-                return new G2Layout(this).getLayout();
-            case EVO_2:
-                return new EVO2Layout(this).getLayout();
-            case PREMIUM:
-                return new XStarPremiumLayout(this).getLayout();
+            case DRAGONFISH:
+                return new DFLayout(this).getLayout();
+//            case EVO:
+//                return new G2Layout(this).getLayout();
+//            case EVO_2:
+//                return new EVO2Layout(this).getLayout();
+//            case PREMIUM:
+//                return new XStarPremiumLayout(this).getLayout();
 
         }
-        return new EVO2Layout(this).getLayout();
+        return new DFLayout(this).getLayout();
     }
 
     public void setFrequency(View view) {
-        DspRFManager2.getInstance().bingAircraftToRemote(AircraftRole.SLAVER);
+//        DspRFManager2.getInstance().bingAircraftToRemote(AircraftRole.SLAVER);
     }
     public void setMasterFequency(View view) {
-        DspRFManager2.getInstance().bingAircraftToRemote(AircraftRole.MASTER);
+//        DspRFManager2.getInstance().bingAircraftToRemote(AircraftRole.MASTER);
     }
 
     public void onResume() {

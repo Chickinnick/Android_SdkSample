@@ -23,29 +23,30 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.autel.AutelNet2.dsp.controller.DspRFManager2;
 import com.autel.common.CallbackWithOneParam;
 import com.autel.common.error.AutelError;
 import com.autel.common.flycontroller.AttitudeInfo;
-import com.autel.common.flycontroller.evo.EvoFlyControllerInfo;
+import com.autel.common.flycontroller.cruiser.CruiserFlyControllerInfo;
 import com.autel.common.mission.AutelCoordinate3D;
 import com.autel.common.mission.AutelMission;
+import com.autel.internal.flycontroller.cruiser.bean.CruiserFlyControllerInfoImpl;
 import com.autel.internal.flycontroller.evo.bean.G2FlyControllerInfoImpl;
-import com.autel.sdk.flycontroller.Evo2FlyController;
+import com.autel.sdk.flycontroller.CruiserFlyController;
 import com.autel.sdk.mission.MissionManager;
 import com.autel.sdk.product.BaseProduct;
-import com.autel.sdk.product.Evo2Aircraft;
+import com.autel.sdk.product.CruiserAircraft;
 import com.autel.sdksample.R;
 import com.autel.sdksample.TestApplication;
+import com.autel.sdksample.base.mission.fragment.DFWaypointFragment;
 import com.autel.sdksample.base.mission.fragment.MissionFragment;
 import com.autel.sdksample.base.mission.fragment.MissionOperatorFragment;
-import com.autel.sdksample.evo.mission.fragment.EvoFollowMissionFragment;
-import com.autel.sdksample.evo.mission.fragment.EvoOrbitMissionFragment;
-import com.autel.sdksample.evo.mission.fragment.EvoWaypointFragment;
-import com.autel.sdksample.xstar.mission.XStarFollowMissionFragment;
-import com.autel.sdksample.xstar.mission.XStarOrbitMissionFragment;
-import com.autel.sdksample.xstar.mission.XStarWaypointFragment;
+import com.autel.sdksample.util.ThreadUtils;
 import com.autel.util.log.AutelLog;
+
+import java.util.Map;
 
 
 public abstract class MapActivity extends FragmentActivity implements MapOperator {
@@ -74,7 +75,7 @@ public abstract class MapActivity extends FragmentActivity implements MapOperato
 
     private LocationChangeListener locationChangeListener;
     private WaypointHeightListener waypointHeightListener;
-    Evo2FlyController xStarFlyController;
+    CruiserFlyController xStarFlyController;
     boolean flyInfoShow;
     volatile long flyInfoNotify;
     long clickStamp = 0;
@@ -91,7 +92,7 @@ public abstract class MapActivity extends FragmentActivity implements MapOperato
     public void onDestroy() {
         super.onDestroy();
         if (null != xStarFlyController) {
-//            xStarFlyController.setFlyControllerInfoListener(null);
+            xStarFlyController.setFlyControllerInfoListener(null);
         }
     }
 
@@ -133,7 +134,25 @@ public abstract class MapActivity extends FragmentActivity implements MapOperato
             }
         });
         getSupportFragmentManager().beginTransaction().replace(R.id.mission_operator, new MissionOperatorFragment()).commit();
-        ;
+        DspRFManager2.getInstance().setLogListener(TAG, new CallbackWithOneParam<String>() {
+
+            @Override
+            public void onFailure(AutelError autelError) {
+
+            }
+
+            @Override
+            public void onSuccess(final String s) {
+                AutelLog.debug_i("DspLog", s);
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MapActivity.this,"log "+s,Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
     }
 
     public void updateLogInfo(final String log) {
@@ -163,45 +182,44 @@ public abstract class MapActivity extends FragmentActivity implements MapOperato
         if (baseProduct == null) {
             switch (type) {
                 case WAYPOINT:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new EvoWaypointFragment(this)).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new DFWaypointFragment(this)).commit();
                     break;
-                case ORBIT:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new EvoOrbitMissionFragment(this)).commit();
-                    break;
-                case FOLLOW:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new EvoFollowMissionFragment(this)).commit();
-                    break;
+//                case ORBIT:
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new EvoOrbitMissionFragment(this)).commit();
+//                    break;
+//                case FOLLOW:
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new EvoFollowMissionFragment(this)).commit();
+//                    break;
                 default:
             }
             return;
         }
         switch (baseProduct.getType()) {
-            case EVO:
+//            case EVO:
+//                switch (type) {
+//                    case WAYPOINT:
+//                        getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new EvoWaypointFragment(this)).commit();
+//                        break;
+//                    case ORBIT:
+//                        getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new EvoOrbitMissionFragment(this)).commit();
+//                        break;
+//                    case FOLLOW:
+//                        getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new EvoFollowMissionFragment(this)).commit();
+//                        break;
+//                    default:
+//                }
+//                break;
+            case DRAGONFISH:
                 switch (type) {
                     case WAYPOINT:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new EvoWaypointFragment(this)).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new DFWaypointFragment(this)).commit();
                         break;
-                    case ORBIT:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new EvoOrbitMissionFragment(this)).commit();
-                        break;
-                    case FOLLOW:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new EvoFollowMissionFragment(this)).commit();
-                        break;
-                    default:
-                }
-                break;
-            case X_STAR:
-            case PREMIUM:
-                switch (type) {
-                    case WAYPOINT:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new XStarWaypointFragment(this)).commit();
-                        break;
-                    case ORBIT:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new XStarOrbitMissionFragment(this)).commit();
-                        break;
-                    case FOLLOW:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new XStarFollowMissionFragment(this)).commit();
-                        break;
+//                    case ORBIT:
+//                        getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new XStarOrbitMissionFragment(this)).commit();
+//                        break;
+//                    case FOLLOW:
+//                        getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new XStarFollowMissionFragment(this)).commit();
+//                        break;
                     default:
                 }
                 break;
@@ -228,14 +246,14 @@ public abstract class MapActivity extends FragmentActivity implements MapOperato
                 case PREMIUM:
 //                    xStarFlyController = ((XStarPremiumAircraft) baseProduct).getFlyController();
                     break;
-                case EVO_2:
-                    xStarFlyController = ((Evo2Aircraft) baseProduct).getFlyController();
+                case DRAGONFISH:
+                    xStarFlyController = ((CruiserAircraft) baseProduct).getFlyController();
                     break;
             }
             if (null != xStarFlyController) {
-                xStarFlyController.setFlyControllerInfoListener(new CallbackWithOneParam<EvoFlyControllerInfo>() {
+                xStarFlyController.setFlyControllerInfoListener(new CallbackWithOneParam<CruiserFlyControllerInfo>() {
                     @Override
-                    public void onSuccess(EvoFlyControllerInfo flyControllerInfo) {
+                    public void onSuccess(CruiserFlyControllerInfo flyControllerInfo) {
                         if (System.currentTimeMillis() - flyInfoNotify > 1000) {
                             flyInfoNotify = System.currentTimeMillis();
                             Message msg = handler.obtainMessage();
@@ -403,7 +421,7 @@ public abstract class MapActivity extends FragmentActivity implements MapOperato
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            G2FlyControllerInfoImpl flyControllerData = (G2FlyControllerInfoImpl) msg.obj;
+            CruiserFlyControllerInfoImpl flyControllerData = (CruiserFlyControllerInfoImpl) msg.obj;
             if (flyInfoShow) {
                 flyControllerInfo.setText(flyControllerData.toString());
             }

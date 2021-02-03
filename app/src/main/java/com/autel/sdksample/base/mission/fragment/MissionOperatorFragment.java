@@ -8,6 +8,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,21 +21,24 @@ import com.autel.common.CallbackWithNoParam;
 import com.autel.common.CallbackWithOneParam;
 import com.autel.common.CallbackWithOneParamProgress;
 import com.autel.common.error.AutelError;
+import com.autel.common.flycontroller.FlightErrorState;
 import com.autel.common.mission.AutelMission;
 import com.autel.common.mission.MissionExecuteState;
 import com.autel.common.mission.RealTimeInfo;
 import com.autel.common.mission.xstar.OrbitMission;
 import com.autel.common.mission.xstar.Waypoint;
 import com.autel.common.mission.xstar.WaypointMission;
-import com.autel.internal.product.EvoAircraftImpl;
+import com.autel.lib.jniHelper.NativeHelper;
+import com.autel.lib.jniHelper.PathPlanningResult;
 import com.autel.sdk.mission.MissionManager;
 import com.autel.sdk.product.BaseProduct;
-import com.autel.sdk.product.XStarAircraft;
-import com.autel.sdk.product.XStarPremiumAircraft;
 import com.autel.sdksample.R;
 import com.autel.sdksample.TestApplication;
 import com.autel.sdksample.base.mission.MapActivity;
+import com.autel.sdksample.base.util.FileUtils;
+import com.autel.util.log.AutelLog;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -45,6 +49,8 @@ public class MissionOperatorFragment extends Fragment {
     Button missionResume;
     Button missionCancel;
     Button missionDownload;
+    Button writeMissionTestData;
+    Button testWaypoint;
     Button yawRestore;
     Button getCurrentMission;
     Button getMissionExecuteState;
@@ -52,6 +58,7 @@ public class MissionOperatorFragment extends Fragment {
     ProgressBar progressBarPrepare;
 
     MissionManager missionManager;
+    private String filePath = FileUtils.getMissionFilePath() + "mission.aut";
 
 
     @Override
@@ -61,16 +68,15 @@ public class MissionOperatorFragment extends Fragment {
     }
 
     protected MissionManager getMissionManager() {
-        BaseProduct
-                product = ((TestApplication) getActivity().getApplicationContext()).getCurrentProduct();
+        BaseProduct product = ((TestApplication) getActivity().getApplicationContext()).getCurrentProduct();
         if (null != product) {
             switch (product.getType()) {
-                case X_STAR:
-                    return ((XStarAircraft) product).getMissionManager();
-                case PREMIUM:
-                    return ((XStarPremiumAircraft) product).getMissionManager();
-                case EVO:
-                    return ((EvoAircraftImpl) product).getMissionManager();
+//                case X_STAR:
+//                    return ((XStarAircraft) product).getMissionManager();
+//                case PREMIUM:
+//                    return ((XStarPremiumAircraft) product).getMissionManager();
+                case DRAGONFISH:
+                    return product.getMissionManager();
             }
 
         }
@@ -84,7 +90,7 @@ public class MissionOperatorFragment extends Fragment {
     }
 
     private void initUi(final View view) {
-        if (getActivity() != null){
+        if (getActivity() != null) {
             ((MapActivity) getActivity()).updateMissionInfo("Mission state : ");
             ((MapActivity) getActivity()).updateLogInfo("RealTimeInfo : ");
         }
@@ -97,7 +103,7 @@ public class MissionOperatorFragment extends Fragment {
                     missionManager.setRealTimeInfoListener(new CallbackWithOneParam<RealTimeInfo>() {
                         @Override
                         public void onSuccess(RealTimeInfo realTimeInfo) {
-                            if (getActivity() != null){
+                            if (getActivity() != null) {
                                 ((MapActivity) getActivity()).updateLogInfo("RealTimeInfo : " + realTimeInfo);
                             }
                         }
@@ -131,7 +137,7 @@ public class MissionOperatorFragment extends Fragment {
             public void onClick(View v) {
                 if (null != missionManager) {
                     progressBarPrepare.setVisibility(View.VISIBLE);
-                    missionManager.prepareMission(((MapActivity)getActivity()).createMission(), new CallbackWithOneParamProgress<Boolean>() {
+                    missionManager.prepareMission(((MapActivity) getActivity()).createMission(),filePath, new CallbackWithOneParamProgress<Boolean>() {
                         @Override
                         public void onProgress(float v) {
 
@@ -139,7 +145,7 @@ public class MissionOperatorFragment extends Fragment {
 
                         @Override
                         public void onSuccess(Boolean aBoolean) {
-                            toastView( R.string.mission_prepare_notify);
+                            toastView(R.string.mission_prepare_notify);
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -169,10 +175,10 @@ public class MissionOperatorFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (null != missionManager) {
-                    missionManager.startMission(new CallbackWithNoParam() {
+                    missionManager.startMission(new CallbackWithOneParam<Pair<Boolean, FlightErrorState>>() {
                         @Override
-                        public void onSuccess() {
-                            toastView( R.string.mission_start_notify);
+                        public void onSuccess(Pair<Boolean, FlightErrorState> booleanFlightErrorStatePair) {
+                            toastView(R.string.mission_start_notify);
                         }
 
                         @Override
@@ -192,7 +198,7 @@ public class MissionOperatorFragment extends Fragment {
                     missionManager.pauseMission(new CallbackWithNoParam() {
                         @Override
                         public void onSuccess() {
-                            toastView( R.string.mission_pause_notify);
+                            toastView(R.string.mission_pause_notify);
                         }
 
                         @Override
@@ -212,7 +218,7 @@ public class MissionOperatorFragment extends Fragment {
                     missionManager.resumeMission(new CallbackWithNoParam() {
                         @Override
                         public void onSuccess() {
-                            toastView( R.string.mission_resume_notify);
+                            toastView(R.string.mission_resume_notify);
                         }
 
                         @Override
@@ -232,7 +238,7 @@ public class MissionOperatorFragment extends Fragment {
                     missionManager.cancelMission(new CallbackWithNoParam() {
                         @Override
                         public void onSuccess() {
-                            toastView( R.string.mission_cancel_notify);
+                            toastView(R.string.mission_cancel_notify);
                         }
 
                         @Override
@@ -245,6 +251,8 @@ public class MissionOperatorFragment extends Fragment {
         });
 
         missionDownload = (Button) view.findViewById(R.id.missionDownload);
+        writeMissionTestData = (Button) view.findViewById(R.id.writeMissionTestData);
+        testWaypoint = (Button) view.findViewById(R.id.testWaypoint);
         missionDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -258,7 +266,7 @@ public class MissionOperatorFragment extends Fragment {
 
                         @Override
                         public void onSuccess(AutelMission autelMission) {
-                            toastView( R.string.mission_download_notify);
+                            toastView(R.string.mission_download_notify);
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -287,6 +295,65 @@ public class MissionOperatorFragment extends Fragment {
                         }
                     });
                 }
+            }
+        });
+        writeMissionTestData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                File myDir = new File(FileUtils.getMissionFilePath());
+                if (!myDir.exists()) {
+                    myDir.mkdirs();
+                }
+                double missionType = 1;
+                double[] droneLocation = new double[]{};
+                double[] homeLocation = new double[]{};//MissionSaveUtils.getHomeLocation(task);
+                double[] launchLocation = new double[]{};//MissionSaveUtils.getLaunchLocation(task);
+                double[] landingLocation = new double[]{};//MissionSaveUtils.getLandingLocation(task);
+                double[] avoidPosition = new double[]{};//MissionSaveUtils.getAvoidPosition(task);
+                //put waypoint head
+                double UAVTurnRad = 0;
+                double UAVFlyVel = 0;
+                double UserFPKIsDef = 0;
+                double UserFlyPathA = 0;
+                double WidthSid = 0;
+                double OverlapSid = 0;
+                double WidthHead = 0;
+                double OverlapHead = 0;
+                double UAVFlyAlt = 0;
+                char waypointLen = 0;
+                int poiPointLen = 0;
+                double[] waypointParamList = new double[]{};//MissionSaveUtils.getWaypointParamList(task);
+                double[] poiParamList = new double[]{};//MissionSaveUtils.getPoiPointParamList(task);
+                int[] linkPoints = new int[]{};//MissionSaveUtils.getPoiLinkPointList(task);
+                boolean isEnableTopographyFollow = true;
+                int res = NativeHelper.writeMissionFile(filePath, missionType,
+                        droneLocation, homeLocation,
+                        launchLocation, landingLocation,
+                        avoidPosition, UAVTurnRad,
+                        UAVFlyVel, UserFPKIsDef,
+                        UserFlyPathA, WidthSid,
+                        OverlapSid, WidthHead,
+                        OverlapHead, UAVFlyAlt,
+                        waypointLen, waypointParamList,
+                        poiPointLen, poiParamList, linkPoints, isEnableTopographyFollow ? 1 : 0);
+                AutelLog.d("Mission"," writeMissionFile result -> "+res);
+            }
+        });
+
+        testWaypoint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double[] drone = new double[]{22.123112,113.232123,1000};
+                double[] homePoint = new double[]{22.123112,113.232123,1000};
+                double[] upHomePoint = new double[]{22.2342412,113.3232123,1000};
+                double[] downHomePoint = new double[]{22.125112,113.232523,1000};
+                double[] waypointParams = new double[]{22.123112,113.232123,1000,22.123312,113.232423,1000};
+                PathPlanningResult waypointMissionPath = NativeHelper.getWaypointMissionPath(drone, homePoint, upHomePoint, downHomePoint, waypointParams);
+                AutelLog.debug_i("updatePlaningPath:", "flyTime = " + waypointMissionPath.getFlyTime()
+                        + ", flyLength = " + waypointMissionPath.getFlyLength() + ", picNum = " + waypointMissionPath.getPictNum()
+                        + ",errorCode = " + waypointMissionPath.getErrorCode() + ", listSize = " + waypointMissionPath.getLatLngList().size());
+
             }
         });
 
@@ -328,21 +395,21 @@ public class MissionOperatorFragment extends Fragment {
                 }
             }
         });
-        final TextView layoutShowState = (TextView)view.findViewById(R.id.layoutShowState);
+        final TextView layoutShowState = (TextView) view.findViewById(R.id.layoutShowState);
         layoutShowState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int distance = view.findViewById(R.id.operatorScroll).getWidth();
-                Log.v("showhide", "x  : "+view.getX());
-                boolean toShow = view.getX()< 0;
-                if(toShow){
+                Log.v("showhide", "x  : " + view.getX());
+                boolean toShow = view.getX() < 0;
+                if (toShow) {
                     view.setX(0);
                     layoutShowState.setText("HIDE");
-                    ((MapActivity)getActivity()).setMissionContainerVisible(true);
-                }else{
+                    ((MapActivity) getActivity()).setMissionContainerVisible(true);
+                } else {
                     view.setX(-distance);
                     layoutShowState.setText("SHOW");
-                    ((MapActivity)getActivity()).setMissionContainerVisible(false);
+                    ((MapActivity) getActivity()).setMissionContainerVisible(false);
                 }
             }
         });
@@ -362,15 +429,19 @@ public class MissionOperatorFragment extends Fragment {
             missionManager.setRealTimeInfoListener(null);
         }
     }
+
     Handler mHandler = new Handler(Looper.getMainLooper());
-    private void toastView(final AutelError autelError){
+
+    private void toastView(final AutelError autelError) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(getActivity().getApplicationContext(), autelError.getDescription(), Toast.LENGTH_LONG).show();
             }
         });
-    } private void toastView(final int log){
+    }
+
+    private void toastView(final int log) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {

@@ -21,13 +21,8 @@ import com.autel.sdk.product.BaseProduct;
 import com.autel.sdk.widget.AutelCodecView;
 import com.autel.sdksample.R;
 import com.autel.sdksample.TestApplication;
+import com.autel.sdksample.base.camera.fragment.CameraDFFragment;
 import com.autel.sdksample.base.camera.fragment.CameraNotConnectFragment;
-import com.autel.sdksample.base.camera.fragment.CameraR12Fragment;
-import com.autel.sdksample.base.camera.fragment.CameraXB015Fragment;
-import com.autel.sdksample.base.camera.fragment.CameraXT701Fragment;
-import com.autel.sdksample.base.camera.fragment.CameraXT705Fragment;
-import com.autel.sdksample.base.camera.fragment.CameraXT706Fragment;
-import com.autel.sdksample.base.camera.fragment.CameraXT709Fragment;
 
 
 public class CameraActivity extends AppCompatActivity {
@@ -95,23 +90,25 @@ public class CameraActivity extends AppCompatActivity {
                 currentCamera = data2;
                 cameraType.setText(data1.toString());
                 switch (data1) {
-                    case R12:
-                        changePage(CameraR12Fragment.class);
-                        break;
-                    case XB015:
-                        changePage(CameraXB015Fragment.class);
-                        break;
-                    case XT701:
-                        changePage(CameraXT701Fragment.class);
-                        break;
-                    case XT705:
-                        changePage(CameraXT705Fragment.class);
-                        break;
-                    case XT706:
-                        changePage(CameraXT706Fragment.class);
-                        break;
-                    case XT709:
-                        changePage(CameraXT709Fragment.class);
+//                    case R12:
+//                        changePage(CameraR12Fragment.class);
+//                        break;
+//                    case XB015:
+//                        changePage(CameraXB015Fragment.class);
+//                        break;
+//                    case XT701:
+//                        changePage(CameraXT701Fragment.class);
+//                        break;
+//                    case XT705:
+//                        changePage(CameraXT705Fragment.class);
+//                        break;
+//                    case XT706:
+//                        changePage(CameraXT706Fragment.class);
+//                        break;
+                    case XT708:
+                    case XT710:
+                    case XT711:
+                        changePage(CameraDFFragment.class);
                         break;
 
                     default:

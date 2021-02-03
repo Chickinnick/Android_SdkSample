@@ -34,36 +34,35 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".evo.G2RemoteControllerActivity" />
-        <activity android:name=".evo.G2FlyControllerActivity" />
-        <activity android:name=".evo2.Evo2FlyControllerActivity" />
-        <activity android:name=".evo2.Evo2BatteryActivity" />
-        <activity android:name=".evo2.Evo2GimbalActivity" />
-        <activity android:name=".evo2.Evo2DspActivity" />
-        <activity android:name=".evo.G2GimbalActivity" />
-        <activity android:name=".evo.G2DspActivity" />
-        <activity android:name=".evo.G2BatteryActivity" />
-        <activity android:name=".xstar.XStarRemoteControllerActivity" />
-        <activity android:name=".xstar.XStarFlyControllerActivity" />
-        <activity android:name=".xstar.XStarGimbalActivity" />
-        <activity android:name=".xstar.XStarDspActivity" />
-        <activity android:name=".xstar.XStarBatteryActivity" />
-        <activity android:name=".premium.XStarPremiumRemoteControllerActivity" />
-        <activity android:name=".premium.XStarPremiumFlyControllerActivity" />
-        <activity android:name=".premium.XStarPremiumGimbalActivity" />
-        <activity android:name=".premium.XStarPremiumDspActivity" />
-        <activity android:name=".premium.XStarPremiumBatteryActivity" />
-        <activity android:name=".evo2.mission.Evo2MissionActivity" />
-        <activity
-            android:name=".evo2.mission.Evo2WayPointActivity"
-            android:screenOrientation="portrait" />
+<!--        <activity android:name=".evo.G2RemoteControllerActivity" />-->
+<!--        <activity android:name=".evo.G2FlyControllerActivity" />-->
+<!--        <activity android:name=".evo2.Evo2FlyControllerActivity" />-->
+<!--        <activity android:name=".evo2.Evo2BatteryActivity" />-->
+<!--        <activity android:name=".evo2.Evo2GimbalActivity" />-->
+<!--        <activity android:name=".evo2.Evo2DspActivity" />-->
+<!--        <activity android:name=".evo.G2GimbalActivity" />-->
+<!--        <activity android:name=".evo.G2DspActivity" />-->
+<!--        <activity android:name=".evo.G2BatteryActivity" />-->
+<!--        <activity android:name=".xstar.XStarRemoteControllerActivity" />-->
+<!--        <activity android:name=".xstar.XStarFlyControllerActivity" />-->
+<!--        <activity android:name=".xstar.XStarGimbalActivity" />-->
+<!--        <activity android:name=".xstar.XStarDspActivity" />-->
+<!--        <activity android:name=".xstar.XStarBatteryActivity" />-->
+<!--        <activity android:name=".premium.XStarPremiumRemoteControllerActivity" />-->
+<!--        <activity android:name=".premium.XStarPremiumFlyControllerActivity" />-->
+<!--        <activity android:name=".premium.XStarPremiumGimbalActivity" />-->
+<!--        <activity android:name=".premium.XStarPremiumDspActivity" />-->
+<!--        <activity android:name=".premium.XStarPremiumBatteryActivity" />-->
+<!--        <activity android:name=".evo2.mission.Evo2MissionActivity" />-->
+<!--        <activity-->
+<!--            android:name=".evo2.mission.Evo2WayPointActivity"-->
+<!--            android:screenOrientation="portrait" />-->
         <activity
             android:name=".base.camera.CameraActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" />
         <activity android:name=".base.BatteryActivity" />
         <activity android:name=".base.album.AlbumActivity" />
-        <activity android:name=".rtk.Evo2RTKActivity" />
         <activity
             android:name=".base.mission.MissionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

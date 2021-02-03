@@ -3,6 +3,8 @@ package com.autel.sdksample.base.util;
 import android.content.Context;
 import android.content.res.AssetManager;
 
+import com.autel.internal.sdk.util.AutelDirPathUtils;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -61,5 +63,19 @@ public class FileUtils {
             }
         }
 
+    }
+
+    public static String getMissionFilePath() {
+        return AutelDirPathUtils.getAppDir() + "/Mission/";
+    }
+
+    public static boolean isPathExist(String path){
+        File mFile = new File(path);
+        if(!mFile.exists()){
+            if(null != mFile.getParentFile() && !mFile.getParentFile().exists()){
+                mFile.getParentFile().mkdirs();
+            }
+        }
+        return mFile.getParentFile().exists();
     }
 }

@@ -14,7 +14,8 @@ import com.autel.internal.sdk.util.AutelDirPathUtils;
 import com.autel.sdk.Autel;
 import com.autel.sdk.AutelSdkConfig;
 import com.autel.sdk.product.BaseProduct;
-import com.autel.sdksample.evo.mission.util.AutelConfigManager;
+import com.autel.sdksample.util.AutelConfigManager;
+import com.autel.video.NetWorkProxyJni;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -54,6 +55,7 @@ public class TestApplication extends MultiDexApplication {
             }
         });
         AutelConfigManager.instance().init(this);
+        NetWorkProxyJni.setType(1);
     }
 
     public BaseProduct getCurrentProduct() {

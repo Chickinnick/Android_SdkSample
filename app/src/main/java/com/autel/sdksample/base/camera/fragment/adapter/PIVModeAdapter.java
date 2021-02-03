@@ -2,7 +2,7 @@ package com.autel.sdksample.base.camera.fragment.adapter;
 
 import android.content.Context;
 
-import com.autel.common.camera.xb015.PIVMode;
+import com.autel.common.camera.base.PIVMode;
 import com.autel.sdksample.base.adapter.SelectorAdapter;
 
 
