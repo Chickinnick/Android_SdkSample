@@ -39,6 +39,7 @@ import com.autel.sdksample.base.util.FileUtils;
 import com.autel.util.log.AutelLog;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -51,6 +52,7 @@ public class MissionOperatorFragment extends Fragment {
     Button missionDownload;
     Button writeMissionTestData;
     Button testWaypoint;
+    Button testMapping;
     Button yawRestore;
     Button getCurrentMission;
     Button getMissionExecuteState;
@@ -84,6 +86,7 @@ public class MissionOperatorFragment extends Fragment {
     }
 
     private String TAG = "Mission";
+
     protected View createView(@LayoutRes int resource) {
         View view = View.inflate(getContext(), resource, null);
         initUi(view);
@@ -138,15 +141,15 @@ public class MissionOperatorFragment extends Fragment {
             public void onClick(View v) {
                 if (null != missionManager) {
                     progressBarPrepare.setVisibility(View.VISIBLE);
-                    missionManager.prepareMission(((MapActivity) getActivity()).createMission(),filePath, new CallbackWithOneParamProgress<Boolean>() {
+                    missionManager.prepareMission(((MapActivity) getActivity()).createMission(), filePath, new CallbackWithOneParamProgress<Boolean>() {
                         @Override
                         public void onProgress(float v) {
-                            AutelLog.d(TAG," prepareMission onProgress "+v);
+                            AutelLog.d(TAG, " prepareMission onProgress " + v);
                         }
 
                         @Override
                         public void onSuccess(Boolean aBoolean) {
-                            AutelLog.d(TAG," prepareMission "+aBoolean);
+                            AutelLog.d(TAG, " prepareMission " + aBoolean);
                             toastView(R.string.mission_prepare_notify);
                             mHandler.post(new Runnable() {
                                 @Override
@@ -159,7 +162,7 @@ public class MissionOperatorFragment extends Fragment {
 
                         @Override
                         public void onFailure(AutelError autelError) {
-                            AutelLog.d(TAG," onFailure "+autelError.getDescription());
+                            AutelLog.d(TAG, " onFailure " + autelError.getDescription());
                             toastView(autelError);
                             mHandler.post(new Runnable() {
                                 @Override
@@ -256,6 +259,7 @@ public class MissionOperatorFragment extends Fragment {
         missionDownload = (Button) view.findViewById(R.id.missionDownload);
         writeMissionTestData = (Button) view.findViewById(R.id.writeMissionTestData);
         testWaypoint = (Button) view.findViewById(R.id.testWaypoint);
+        testMapping = (Button) view.findViewById(R.id.testMapping);
         missionDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -340,22 +344,98 @@ public class MissionOperatorFragment extends Fragment {
                         OverlapHead, UAVFlyAlt,
                         waypointLen, waypointParamList,
                         poiPointLen, poiParamList, linkPoints, isEnableTopographyFollow ? 1 : 0);
-                AutelLog.d("NativeHelper"," writeMissionFile result -> "+res);
+                AutelLog.d("NativeHelper", " writeMissionFile result -> " + res);
             }
         });
 
         testWaypoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                double[] drone = new double[]{22.123112,113.232123,1000};
-                double[] homePoint = new double[]{22.123112,113.232123,1000};
-                double[] upHomePoint = new double[]{22.2342412,113.3232123,1000};
-                double[] downHomePoint = new double[]{22.125112,113.232523,1000};
-                double[] waypointParams = new double[]{22.123112,113.232123,1000,22.123312,113.232423,1000};
+                //飞机当前位置
+                double[] drone = new double[]{22.59651, 113.9972969, 0};//经纬高
+                //返航点位置
+                double[] homePoint = new double[]{22.59651, 113.9972969, 100.0};//经纬高
+                //上升盘旋点
+                double[] upHomePoint = new double[]{22.59651, 113.99434723115584, 100.0, 120.0};//经、纬、高、盘旋半径
+                //下降盘旋点
+                double[] downHomePoint = new double[]{22.59651, 114.00024656884415, 100, 120.0};//经、纬、高、盘旋半径
+
+
+                /**
+                 * waypointParams：航点参数每16个值为一组，以下是以两个航点为例子；
+                 参数说明：航点定义根据接口协议有16个变量，分别为：
+                 航点定义根据接口协议有16个变量，分别为：
+                 变量 0：当前航点标识（目前等于航点在当前任务中的序号）
+                 变量 1：当前航点类型，其中：0–普通航点/飞越;1-兴趣点Orbit;4–起飞航点;5–按时间盘旋航点;6-按圈数盘旋航点;7–降落航点
+                 变量 2：航点坐标，纬度
+                 变量 3：航点坐标，经度
+                 变量 4：航点坐标，高度
+                 变量 5：航点飞行速度，单位米/秒
+                 变量 6：盘旋时间或盘旋圈数，只针对航点类型为盘旋有用
+                 变量 7：盘旋半径，单位：米
+                 变量 8：盘旋方向：0-顺时针;1-逆时针盘旋
+                 变量 9：兴趣点起始角度 1-360度
+                 变量10：兴趣点水平角度 1-360度
+                 变量11：相机动作类型: 0-无，1-拍照，2-定时拍照，3-定距拍照，4-录像
+                 变量12：相机动作参数，定时(单位s)和定距（单位m）的参数
+                 变量13：相机动作参数，云台俯仰角（-120 -- 0）
+                 变量14-15：未定义
+                 */
+                double[] waypointParams = new double[]{1.0, 0.0, 22.59794923247847, 113.9946704742452, 100.0, 17.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                        2.0, 0.0, 22.593907884795755, 113.99646218984662, 100.0, 17.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
                 PathPlanningResult waypointMissionPath = NativeHelper.getWaypointMissionPath(drone, homePoint, upHomePoint, downHomePoint, waypointParams);
                 AutelLog.debug_i("NativeHelper:", "flyTime = " + waypointMissionPath.getFlyTime()
                         + ", flyLength = " + waypointMissionPath.getFlyLength() + ", picNum = " + waypointMissionPath.getPictNum()
                         + ",errorCode = " + waypointMissionPath.getErrorCode() + ", listSize = " + waypointMissionPath.getLatLngList().size());
+
+            }
+        });
+        testMapping.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //飞机当前位置
+                double[] drone = new double[]{22.59651, 113.9972969, 0};//经纬高
+                //返航点位置
+                double[] homePoint = new double[]{22.59651, 113.9972969, 100.0};//经纬高
+                //上升盘旋点
+                double[] upHomePoint = new double[]{22.59651, 113.99434723115584, 100.0, 120.0};//经、纬、高、盘旋半径
+                //下降盘旋点
+                double[] downHomePoint = new double[]{22.59651, 114.00024656884415, 100, 120.0};//经、纬、高、盘旋半径
+                //途经点1 （上升盘旋点到任务之间添加）
+                double[] startAvoid= new double[]{22.595300191562032, 113.98885025388489, 100, 1};//经、纬、高、是否有效（0-无效，1-有效）
+                //途经点2
+                double[] endAvoid = new double[]{22.592050563109837, 113.99623427307421, 100, 1};//经、纬、高、是否有效（0-无效，1-有效）
+
+                double[] avoidPoints = Arrays.copyOf(startAvoid, startAvoid.length + endAvoid.length);
+                //将b数组添加到已经含有a数组的c数组中去
+                System.arraycopy(endAvoid, 0, avoidPoints, startAvoid.length, endAvoid.length);
+                //矩形或多边形顶点坐标(经、纬、高)
+                double[] vertexs =new double[]{22.598363332625695, 113.99316746476211,100};
+                //航线高度
+                float height = 100f;
+                //航线速度
+                float speed = 17.0f;
+                //旁向重叠率
+                double sideRate = 0.8f;
+                //主航线重叠率
+                float courseRate = 0.7f;
+                //主航线角度 0:自动，1：用户自定义航向角度
+                int userDefineAngle = 0 ;
+                //当userDefineAngle为1时有效
+                int courseAngle = 30;
+                //飞机转弯半径，默认要设置120
+                int turningRadius = 120;
+                //旁向扫描宽度
+                double sideScanWidth = 140.56235f;//2*height*tan(HFOV/2)需要自行计算得出
+                //航向扫描宽度
+                double courseScanWidth = 78.98377f;//2*height*tan(VFOV/2)
+
+
+                PathPlanningResult result = NativeHelper.getMappingMissionPath(drone, homePoint, upHomePoint, downHomePoint,
+                        vertexs, avoidPoints, height, speed, sideRate, courseRate
+                        , userDefineAngle, courseAngle, turningRadius
+                        , sideScanWidth, courseScanWidth);
+                AutelLog.d(TAG," result "+result.getArea()+" "+result.getErrorCode());
 
             }
         });
