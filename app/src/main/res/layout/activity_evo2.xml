@@ -237,12 +237,14 @@
                 android:id="@+id/setFequency"
                 android:text="从机对频"
                 android:textAllCaps="false"
+                android:visibility="gone"
                 android:onClick="setFrequency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <Button
                 android:id="@+id/mainFequency"
                 android:text="主机对频"
+                android:visibility="gone"
                 android:textAllCaps="false"
                 android:onClick="setMasterFequency"
                 android:layout_width="wrap_content"
