@@ -83,6 +83,7 @@ public class MissionOperatorFragment extends Fragment {
         return null;
     }
 
+    private String TAG = "Mission";
     protected View createView(@LayoutRes int resource) {
         View view = View.inflate(getContext(), resource, null);
         initUi(view);
@@ -140,11 +141,12 @@ public class MissionOperatorFragment extends Fragment {
                     missionManager.prepareMission(((MapActivity) getActivity()).createMission(),filePath, new CallbackWithOneParamProgress<Boolean>() {
                         @Override
                         public void onProgress(float v) {
-
+                            AutelLog.d(TAG," prepareMission onProgress "+v);
                         }
 
                         @Override
                         public void onSuccess(Boolean aBoolean) {
+                            AutelLog.d(TAG," prepareMission "+aBoolean);
                             toastView(R.string.mission_prepare_notify);
                             mHandler.post(new Runnable() {
                                 @Override
@@ -157,6 +159,7 @@ public class MissionOperatorFragment extends Fragment {
 
                         @Override
                         public void onFailure(AutelError autelError) {
+                            AutelLog.d(TAG," onFailure "+autelError.getDescription());
                             toastView(autelError);
                             mHandler.post(new Runnable() {
                                 @Override
@@ -337,7 +340,7 @@ public class MissionOperatorFragment extends Fragment {
                         OverlapHead, UAVFlyAlt,
                         waypointLen, waypointParamList,
                         poiPointLen, poiParamList, linkPoints, isEnableTopographyFollow ? 1 : 0);
-                AutelLog.d("Mission"," writeMissionFile result -> "+res);
+                AutelLog.d("NativeHelper"," writeMissionFile result -> "+res);
             }
         });
 
@@ -350,7 +353,7 @@ public class MissionOperatorFragment extends Fragment {
                 double[] downHomePoint = new double[]{22.125112,113.232523,1000};
                 double[] waypointParams = new double[]{22.123112,113.232123,1000,22.123312,113.232423,1000};
                 PathPlanningResult waypointMissionPath = NativeHelper.getWaypointMissionPath(drone, homePoint, upHomePoint, downHomePoint, waypointParams);
-                AutelLog.debug_i("updatePlaningPath:", "flyTime = " + waypointMissionPath.getFlyTime()
+                AutelLog.debug_i("NativeHelper:", "flyTime = " + waypointMissionPath.getFlyTime()
                         + ", flyLength = " + waypointMissionPath.getFlyLength() + ", picNum = " + waypointMissionPath.getPictNum()
                         + ",errorCode = " + waypointMissionPath.getErrorCode() + ", listSize = " + waypointMissionPath.getLatLngList().size());
 

@@ -33,7 +33,6 @@ import com.autel.common.flycontroller.cruiser.CruiserFlyControllerInfo;
 import com.autel.common.mission.AutelCoordinate3D;
 import com.autel.common.mission.AutelMission;
 import com.autel.internal.flycontroller.cruiser.bean.CruiserFlyControllerInfoImpl;
-import com.autel.internal.flycontroller.evo.bean.G2FlyControllerInfoImpl;
 import com.autel.sdk.flycontroller.CruiserFlyController;
 import com.autel.sdk.mission.MissionManager;
 import com.autel.sdk.product.BaseProduct;
@@ -45,8 +44,6 @@ import com.autel.sdksample.base.mission.fragment.MissionFragment;
 import com.autel.sdksample.base.mission.fragment.MissionOperatorFragment;
 import com.autel.sdksample.util.ThreadUtils;
 import com.autel.util.log.AutelLog;
-
-import java.util.Map;
 
 
 public abstract class MapActivity extends FragmentActivity implements MapOperator {

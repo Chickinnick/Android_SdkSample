@@ -55,7 +55,7 @@ public class TestApplication extends MultiDexApplication {
             }
         });
         AutelConfigManager.instance().init(this);
-        NetWorkProxyJni.setType(1);
+        NetWorkProxyJni.setType(0);//使用基站连接时设置0，使用图传直连时设置为1
     }
 
     public BaseProduct getCurrentProduct() {
