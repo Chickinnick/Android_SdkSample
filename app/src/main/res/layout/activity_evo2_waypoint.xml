@@ -57,4 +57,29 @@
         android:layout_margin="@dimen/common_20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cancel"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/download"
+        android:layout_marginTop="@dimen/item_margin_bottom"
+        android:layout_marginStart="@dimen/item_margin_bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/text_background"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/cameraPattern"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:text="cameraPattern" />
+        <Spinner
+            android:id="@+id/cameraPatternList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:entries="@array/camera_pattern_modes"
+            />
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

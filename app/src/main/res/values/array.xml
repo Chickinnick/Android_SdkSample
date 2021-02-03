@@ -99,4 +99,9 @@
         <item>@string/camera_display_mode_ir</item>
         <item>@string/camera_display_mode_pip</item>
     </string-array>
+    <string-array name="camera_pattern_modes">
+        <item>@string/camera_pattern_manual</item>
+        <item>@string/camera_pattern_waypoint</item>
+        <item>@string/camera_pattern_timelapse</item>
+    </string-array>
 </resources>

@@ -116,5 +116,8 @@
     <string name="camera_display_mode_normal">Visible Light</string>
     <string name="camera_display_mode_ir">Infrared</string>
     <string name="camera_display_mode_pip">Picture in Picture</string>
+    <string name="camera_pattern_manual" >手动飞行</string>
+    <string name="camera_pattern_waypoint">任务飞行</string>
+    <string name="camera_pattern_timelapse">延时摄影</string>
 
 </resources>

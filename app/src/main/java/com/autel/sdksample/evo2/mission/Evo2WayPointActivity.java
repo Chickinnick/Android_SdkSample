@@ -3,13 +3,20 @@ package com.autel.sdksample.evo2.mission;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.autel.common.CallbackWithNoParam;
 import com.autel.common.CallbackWithOneParam;
 import com.autel.common.CallbackWithOneParamProgress;
+import com.autel.common.CallbackWithTwoParams;
 import com.autel.common.battery.evo.EvoBatteryInfo;
+import com.autel.common.camera.CameraProduct;
+import com.autel.common.camera.base.CameraPattern;
+import com.autel.common.camera.base.MediaMode;
 import com.autel.common.error.AutelError;
 import com.autel.common.flycontroller.ARMWarning;
 import com.autel.common.flycontroller.evo.EvoFlyControllerInfo;
@@ -29,12 +36,23 @@ import com.autel.common.product.AutelProductType;
 import com.autel.common.remotecontroller.RemoteControllerInfo;
 import com.autel.internal.sdk.mission.evo2.Evo2WaypointRealTimeInfoImpl;
 import com.autel.sdk.battery.EvoBattery;
+import com.autel.sdk.camera.AutelBaseCamera;
+import com.autel.sdk.camera.AutelCameraManager;
+import com.autel.sdk.camera.AutelXT701;
 import com.autel.sdk.flycontroller.Evo2FlyController;
 import com.autel.sdk.mission.MissionManager;
 import com.autel.sdk.product.BaseProduct;
 import com.autel.sdk.remotecontroller.AutelRemoteController;
 import com.autel.sdksample.R;
 import com.autel.sdksample.TestApplication;
+import com.autel.sdksample.base.camera.fragment.CameraNotConnectFragment;
+import com.autel.sdksample.base.camera.fragment.CameraR12Fragment;
+import com.autel.sdksample.base.camera.fragment.CameraXB015Fragment;
+import com.autel.sdksample.base.camera.fragment.CameraXT701Fragment;
+import com.autel.sdksample.base.camera.fragment.CameraXT705Fragment;
+import com.autel.sdksample.base.camera.fragment.CameraXT706Fragment;
+import com.autel.sdksample.base.camera.fragment.CameraXT709Fragment;
+import com.autel.sdksample.util.ThreadUtils;
 import com.autel.util.log.AutelLog;
 
 import java.util.ArrayList;
@@ -56,6 +74,9 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
     private boolean isGpsOk = false; //当前gps是否OK
     private boolean isImageTransOk = false; //当前图传信号是否OK
     private boolean isCanTakeOff = false; //是否能起飞
+    private String TAG = "Evo2WayPointActivity";
+    private Spinner cameraPatternModeList;
+    private CameraPattern cameraPattern = CameraPattern.FREE_FLIGHT;
 
     enum FlyState {
         Prepare, Start, Pause, None
@@ -64,6 +85,9 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
     private FlyState flyState = FlyState.None;
 
     private int id = 1;
+    AutelCameraManager autelCameraManager;
+    private AutelBaseCamera autelBaseCamera ;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +96,26 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_evo2_waypoint);
 
         BaseProduct product = ((TestApplication) getApplicationContext()).getCurrentProduct();
+        if (null != product) {
+            autelCameraManager = product.getCameraManager();
+            autelCameraManager.setCameraChangeListener(new CallbackWithTwoParams<CameraProduct, AutelBaseCamera>() {
+                @Override
+                public void onSuccess(final CameraProduct data1, final AutelBaseCamera data2) {
+                    Log.v(TAG, "initListener onSuccess connect " + data1);
+                    if (autelBaseCamera == data2) {
+                        return;
+                    }
+                    autelBaseCamera = data2;
+
+
+                }
+
+                @Override
+                public void onFailure(AutelError error) {
+                    Log.v(TAG, "initListener onFailure error " + error.getDescription());
+                }
+            });
+        }
         if (null != product && product.getType() == AutelProductType.EVO_2) {
             missionManager = product.getMissionManager();
             missionManager.setRealTimeInfoListener(new CallbackWithOneParam<RealTimeInfo>() {
@@ -149,6 +193,30 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         AutelLog.d("init missionManager" + missionManager);
         initView();
         initData();
+        cameraPatternModeList = (Spinner) findViewById(R.id.cameraPatternList);
+        cameraPatternModeList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        cameraPattern = CameraPattern.FREE_FLIGHT;
+                        break;
+                    case 1:
+                        cameraPattern = CameraPattern.MISSION_FLIGHT;
+                        break;
+                    case 2:
+                        cameraPattern = CameraPattern.DELAYED_PHOTOGRAPHY;
+                        break;
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 
     private void initView() {
@@ -158,6 +226,8 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
         findViewById(R.id.resume).setOnClickListener(this);
         findViewById(R.id.cancel).setOnClickListener(this);
         findViewById(R.id.download).setOnClickListener(this);
+        findViewById(R.id.cameraPattern).setOnClickListener(this);
+
     }
 
     private void initData() {
@@ -477,6 +547,35 @@ public class Evo2WayPointActivity extends AppCompatActivity implements View.OnCl
                 }
             }
             break;
+            case R.id.cameraPattern:
+                if(null == autelBaseCamera){
+                    Toast.makeText(getApplicationContext(),"相机未连接",Toast.LENGTH_SHORT).show();
+                    return;
+
+                }
+                autelBaseCamera.setCameraPattern(cameraPattern, new CallbackWithNoParam() {
+                    @Override
+                    public void onSuccess() {
+                        ThreadUtils.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),"setCameraPattern success",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(AutelError autelError) {
+                        ThreadUtils.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),"setCameraPattern onFailure",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+                });
+                break;
         }
     }
 
