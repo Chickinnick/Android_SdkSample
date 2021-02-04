@@ -9,6 +9,7 @@ import com.autel.sdksample.base.CodecActivity;
 import com.autel.sdksample.base.album.AlbumActivity;
 import com.autel.sdksample.base.camera.CameraActivity;
 import com.autel.sdksample.base.mission.MissionActivity;
+import com.autel.sdksample.dragonfish.mission.DFWayPointActivity;
 
 /**
  * Created by A16343 on 2017/9/5.
@@ -69,7 +70,7 @@ public class DFLayout {
         mLayout.findViewById(R.id.evo2MissionTest).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                mContext.startActivity(new Intent(mContext, Evo2MissionActivity.class));
+                mContext.startActivity(new Intent(mContext, DFWayPointActivity.class));
             }
         });
 
