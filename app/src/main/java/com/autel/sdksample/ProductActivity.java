@@ -1,16 +1,22 @@
 package com.autel.sdksample;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
 import com.autel.AutelNet2.dsp.controller.DspRFManager2;
+import com.autel.aidl.IBateWifiManager;
+import com.autel.aidl.WIFiScanResult;
 import com.autel.common.dsp.evo.AircraftRole;
 import com.autel.common.product.AutelProductType;
 import com.autel.sdk.Autel;
@@ -34,11 +40,86 @@ public class ProductActivity extends AppCompatActivity {
     private String fileConfig3 = "/sdcard/anddev/autel13.cfg";
     private String fileConfig4 = "/sdcard/anddev/autel13.backup";
     private AutelProductType currentType = AutelProductType.UNKNOWN;
+    private DFLayout dfLayout;
+
+    private IBateWifiManager mService;
+    private boolean mIsBound;
+    private AdditionServiceConnection mServiceConnection;
+
+
+
+    /**
+     * bind service
+     */
+    private void doBindService() {
+        mServiceConnection = new AdditionServiceConnection();
+        Intent intent = new Intent();
+        intent.setAction("com.autel.aidlservice.aidl");
+        intent.setPackage("com.autel.basestation");
+        bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
+
+    }
+
+    /**
+     * unbind service
+     */
+    private void doUnbindService() {
+        if (mIsBound) {
+            unbindService(mServiceConnection);
+            mServiceConnection = null;
+            mIsBound = false;
+        }
+    }
+
+    class AdditionServiceConnection implements ServiceConnection {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            // 连接的时候获取本地代理，这样我们就可以调用 service 中的方法了。
+            mService = IBateWifiManager.Stub.asInterface((IBinder) service);
+            mIsBound = true;
+            try {
+                //设置死亡代理
+                service.linkToDeath(mDeathRecipient, 0);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            Log.d(TAG, "onServiceConnected: ");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+            mIsBound = false;
+            Log.d(TAG, "onServiceDisconnected: ");
+        }
+    }
+
+    /**
+     * 监听Binder是否死亡
+     */
+    private IBinder.DeathRecipient mDeathRecipient = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+            if (mService == null) {
+                return;
+            }
+            mService.asBinder().unlinkToDeath(mDeathRecipient, 0);
+            mService = null;
+            //重新绑定
+            doBindService();
+        }
+    };
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        doUnbindService();
+    }
 
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product);
+//        setContentView(R.layout.activity_product);
         setContentView(createView(AutelProductType.DRAGONFISH));
         Log.v("productType", "ProductActivity onCreate ");
         //*/
@@ -88,16 +169,35 @@ public class ProductActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 123);
         }
-        FileUtils.Initialize(getAppContext(),fileConfig1,"autel288_7.cfg");
-        FileUtils.Initialize(getAppContext(),fileConfig2,"autel288_7_final.weights");
-        FileUtils.Initialize(getAppContext(),fileConfig3,"autel13.cfg");
-        FileUtils.Initialize(getAppContext(),fileConfig4,"autel13.backup");
+//        FileUtils.Initialize(getAppContext(),fileConfig1,"autel288_7.cfg");
+//        FileUtils.Initialize(getAppContext(),fileConfig2,"autel288_7_final.weights");
+//        FileUtils.Initialize(getAppContext(),fileConfig3,"autel13.cfg");
+//        FileUtils.Initialize(getAppContext(),fileConfig4,"autel13.backup");
+
+    }
+
+    private void initView() {
+
+        dfLayout.getLayout().findViewById(R.id.startScan).setOnClickListener(v -> {
+            try {
+                mService.startScan();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        });
+        dfLayout.getLayout().findViewById(R.id.connectWifi).setOnClickListener(v -> {
+            try {
+                mService.connect(new WIFiScanResult("wer"),"323423");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private View createView(AutelProductType productType) {
-        switch (productType) {
-            case DRAGONFISH:
-                return new DFLayout(this).getLayout();
+//        switch (productType) {
+//            case DRAGONFISH:
+//                return new DFLayout(this).getLayout();
 //            case EVO:
 //                return new G2Layout(this).getLayout();
 //            case EVO_2:
@@ -105,8 +205,9 @@ public class ProductActivity extends AppCompatActivity {
 //            case PREMIUM:
 //                return new XStarPremiumLayout(this).getLayout();
 
-        }
-        return new DFLayout(this).getLayout();
+//        }
+        dfLayout = new DFLayout(this);
+        return dfLayout.getLayout();
     }
 
     public void setFrequency(View view) {
@@ -119,6 +220,8 @@ public class ProductActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         setTitle(currentType.toString());
+        doBindService();
+        initView();
     }
 
     @Override
