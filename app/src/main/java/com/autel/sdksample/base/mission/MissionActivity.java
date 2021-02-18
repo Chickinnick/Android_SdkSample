@@ -3,12 +3,13 @@ package com.autel.sdksample.base.mission;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.autel.sdksample.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class MissionActivity extends AppCompatActivity {

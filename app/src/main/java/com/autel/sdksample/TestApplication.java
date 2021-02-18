@@ -5,7 +5,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
-import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.autel.common.CallbackWithNoParam;
@@ -34,6 +33,8 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import androidx.multidex.MultiDexApplication;
 
 public class TestApplication extends MultiDexApplication {
     private final String TAG = getClass().getSimpleName();

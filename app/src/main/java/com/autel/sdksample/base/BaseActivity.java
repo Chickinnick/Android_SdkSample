@@ -3,7 +3,6 @@ package com.autel.sdksample.base;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +12,8 @@ import android.widget.TextView;
 import com.autel.sdk.product.BaseProduct;
 import com.autel.sdksample.R;
 import com.autel.sdksample.TestApplication;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public abstract class BaseActivity<T> extends AppCompatActivity {

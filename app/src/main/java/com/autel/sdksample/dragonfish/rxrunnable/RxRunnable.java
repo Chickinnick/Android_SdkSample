@@ -2,13 +2,13 @@ package com.autel.sdksample.dragonfish.rxrunnable;
 
 
 
-import android.support.annotation.NonNull;
 
 import com.autel.common.error.AutelError;
 import com.autel.common.error.RxException;
 
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Scheduler;

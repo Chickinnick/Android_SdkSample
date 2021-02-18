@@ -3,8 +3,6 @@ package com.autel.sdksample.base.camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +21,9 @@ import com.autel.sdksample.R;
 import com.autel.sdksample.TestApplication;
 import com.autel.sdksample.base.camera.fragment.CameraDFFragment;
 import com.autel.sdksample.base.camera.fragment.CameraNotConnectFragment;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 
 public class CameraActivity extends AppCompatActivity {

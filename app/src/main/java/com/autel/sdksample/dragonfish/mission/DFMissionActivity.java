@@ -2,10 +2,11 @@ package com.autel.sdksample.dragonfish.mission;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.autel.sdksample.R;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class DFMissionActivity extends AppCompatActivity {

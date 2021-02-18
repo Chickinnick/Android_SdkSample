@@ -1,9 +1,6 @@
 package com.autel.sdksample.dragonfish.mission;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +13,6 @@ import com.autel.common.battery.cruiser.CruiserBatteryInfo;
 import com.autel.common.error.AutelError;
 import com.autel.common.flycontroller.AutoSafeState;
 import com.autel.common.flycontroller.FlightErrorState;
-import com.autel.common.flycontroller.FlyMode;
 import com.autel.common.flycontroller.ModelType;
 import com.autel.common.flycontroller.SafeCheck;
 import com.autel.common.flycontroller.cruiser.CruiserFlyControllerInfo;
@@ -41,7 +37,6 @@ import com.autel.sdk.remotecontroller.AutelRemoteController;
 import com.autel.sdk10.utils.BytesUtils;
 import com.autel.sdksample.R;
 import com.autel.sdksample.TestApplication;
-import com.autel.sdksample.base.mission.MapActivity;
 import com.autel.sdksample.base.util.FileUtils;
 import com.autel.sdksample.dragonfish.rxrunnable.IOUiRunnable;
 import com.autel.util.log.AutelLog;
@@ -51,6 +46,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.Observable;
 
 

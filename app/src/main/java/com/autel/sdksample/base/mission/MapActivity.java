@@ -10,11 +10,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +39,12 @@ import com.autel.sdksample.base.mission.fragment.MissionFragment;
 import com.autel.sdksample.base.mission.fragment.MissionOperatorFragment;
 import com.autel.sdksample.util.ThreadUtils;
 import com.autel.util.log.AutelLog;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 
 public abstract class MapActivity extends FragmentActivity implements MapOperator {

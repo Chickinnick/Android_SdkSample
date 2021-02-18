@@ -4,9 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -22,29 +19,23 @@ import com.autel.common.CallbackWithOneParam;
 import com.autel.common.CallbackWithOneParamProgress;
 import com.autel.common.error.AutelError;
 import com.autel.common.flycontroller.FlightErrorState;
-import com.autel.common.mission.AutelCoordinate3D;
 import com.autel.common.mission.AutelMission;
 import com.autel.common.mission.MissionExecuteState;
 import com.autel.common.mission.RealTimeInfo;
-import com.autel.common.mission.base.DirectionLatLng;
-import com.autel.common.mission.base.DistanceModel;
-import com.autel.common.mission.base.LineDividerModel;
 import com.autel.common.mission.xstar.OrbitMission;
 import com.autel.common.mission.xstar.Waypoint;
 import com.autel.common.mission.xstar.WaypointMission;
-import com.autel.lib.jniHelper.NativeHelper;
-import com.autel.lib.jniHelper.PathPlanningResult;
 import com.autel.sdk.mission.MissionManager;
 import com.autel.sdk.product.BaseProduct;
 import com.autel.sdksample.R;
 import com.autel.sdksample.TestApplication;
 import com.autel.sdksample.base.mission.MapActivity;
-import com.autel.sdksample.base.util.FileUtils;
-import com.autel.util.log.AutelLog;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.List;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 
 public class MissionOperatorFragment extends Fragment {

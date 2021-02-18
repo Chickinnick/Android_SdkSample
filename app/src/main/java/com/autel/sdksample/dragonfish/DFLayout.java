@@ -98,5 +98,11 @@ public class DFLayout {
 //                mContext.startActivity(new Intent(mContext, Evo2RTKActivity.class));
             }
         });
+        mLayout.findViewById(R.id.tvSerial).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContext.startActivity(new Intent(mContext,SerialAidlActivity.class));
+            }
+        });
     }
 }

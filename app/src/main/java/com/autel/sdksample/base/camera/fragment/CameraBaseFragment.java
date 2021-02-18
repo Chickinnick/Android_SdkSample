@@ -1,6 +1,5 @@
 package com.autel.sdksample.base.camera.fragment;
 
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -17,6 +16,8 @@ import com.autel.common.error.AutelError;
 import com.autel.sdk.camera.AutelBaseCamera;
 import com.autel.sdksample.R;
 import com.autel.sdksample.base.camera.CameraActivity;
+
+import androidx.fragment.app.Fragment;
 
 public class CameraBaseFragment extends Fragment {
     private final String TAG = getClass().getSimpleName();

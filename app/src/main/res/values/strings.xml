@@ -116,5 +116,6 @@
     <string name="camera_display_mode_normal">Visible Light</string>
     <string name="camera_display_mode_ir">Infrared</string>
     <string name="camera_display_mode_pip">Picture in Picture</string>
+    <string name="title_activity_serial_aidl">SerialAidlActivity</string>
 
 </resources>

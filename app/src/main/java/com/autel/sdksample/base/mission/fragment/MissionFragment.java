@@ -1,9 +1,6 @@
 package com.autel.sdksample.base.mission.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +9,10 @@ import com.autel.common.mission.AutelMission;
 import com.autel.sdksample.R;
 import com.autel.sdksample.base.mission.MapActivity;
 import com.autel.sdksample.base.mission.MapOperator;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 
 public abstract class MissionFragment extends Fragment {

@@ -2,7 +2,6 @@ package com.autel.sdksample.base.mission.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +29,8 @@ import com.autel.sdksample.base.mission.adapter.EvoWaypointFinishActionAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import androidx.annotation.Nullable;
 
 /**
  *

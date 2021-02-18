@@ -11,10 +11,6 @@ import java.util.List;
 
 interface IHardwareManager {
 
-    //扫描Beta Wifi
-    void startScan();
-    //连接wifi
-    void connect(in WIFiScanResult ssid,String pwd);
     //监听平板按键消息事件
     void addSerialKeystrokeListener(ISerialKeystrokeListener listener);
     //监听5.8g连接状态消息
