@@ -9,11 +9,16 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 
+import com.autel.aidl.IBetaWIFiListListener;
 import com.autel.aidl.IHardwareManager;
 import com.autel.aidl.IHardwareRealTimeInterface;
 import com.autel.aidl.ISerialG5_8StatusListener;
 import com.autel.aidl.ISerialKeystrokeListener;
+import com.autel.aidl.WIFiScanResult;
 import com.autel.sdksample.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -52,7 +57,7 @@ public class SerialAidlActivity extends AppCompatActivity {
     public void start5_8gPairing(View view) {
         try {
                 mService.start5_8gPairing();
-
+            Log.d(TAG,"start5_8gPairing");
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -60,6 +65,7 @@ public class SerialAidlActivity extends AppCompatActivity {
 
     public void setHardwareRealtimelistener(View view) {
         try {
+            Log.d(TAG,"setHardwareRealtimelistener");
                 mService.addHardwareRealTimeListener(mSerialRealTimeCallback);
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -69,6 +75,7 @@ public class SerialAidlActivity extends AppCompatActivity {
     public void setSerialKeyStrokeListener(View view) {
         try {
             mService.addSerialKeystrokeListener(mSerialKeyStrokeCallback);
+            Log.d(TAG,"setSerialKeyStrokeListener");
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -77,11 +84,65 @@ public class SerialAidlActivity extends AppCompatActivity {
     public void addSerialG5_8StatusListener(View view) {
         try {
             mService.addSerialG5_8StatusListener(mSerial58gStatusCallback);
+            Log.d(TAG,"addSerialG5_8StatusListener");
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
+    public void removeAllListener(View view) {
+        if(null != mService){
+            try {
+                mService.removeAllListener();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void scanWifi(View view) {
+        if(null != mService){
+            try {
+                mService.startScan(mBetaWIFiListCallback);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void connectWifi(View view) {
+        if(null != listWIFis && listWIFis.size()>0){
+            try {
+                mService.connect(listWIFis.get(0),"123456789");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    List<WIFiScanResult> listWIFis = new ArrayList<>();
+    private final class BetaWIFiListCallBack extends IBetaWIFiListListener.Stub{
+
+
+        @Override
+        public void onScanLists(List<WIFiScanResult> list) throws RemoteException {
+            listWIFis.clear();
+            listWIFis.addAll(list);
+            Log.d(TAG,"onScanLists list.size "+list.size());
+            for (WIFiScanResult result:
+                 list) {
+                Log.d(TAG,"onScanLists list.size "+result.SSID);
+            }
+
+        }
+
+        @Override
+        public void isConnected(boolean isConnect) throws RemoteException {
+            Log.d(TAG,"wifi isConnected "+isConnect);
+        }
+    }
 
     private static final class SerialKeyStrokeCallBack extends ISerialKeystrokeListener.Stub{
 
@@ -109,6 +170,7 @@ public class SerialAidlActivity extends AppCompatActivity {
     private boolean mIsBound;
     private AdditionServiceConnection mServiceConnection;
 
+    private BetaWIFiListCallBack mBetaWIFiListCallback = new BetaWIFiListCallBack();
     private SerialKeyStrokeCallBack mSerialKeyStrokeCallback = new SerialKeyStrokeCallBack();
     private SerialG5_8StatusCallback mSerial58gStatusCallback = new SerialG5_8StatusCallback();
     private SerialRealTimeCallback mSerialRealTimeCallback = new SerialRealTimeCallback();
@@ -181,9 +243,7 @@ public class SerialAidlActivity extends AppCompatActivity {
         super.onDestroy();
         if(null != mService){
             try {
-                mService.addHardwareRealTimeListener(null);
-                mService.addSerialG5_8StatusListener(null);
-                mService.addSerialKeystrokeListener(null);
+                mService.removeAllListener();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

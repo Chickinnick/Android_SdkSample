@@ -21,6 +21,26 @@
             android:layout_marginBottom="@dimen/item_margin_bottom"
             android:clickable="true"
             android:gravity="center"
+            android:onClick="scanWifi"
+            android:padding="@dimen/text_padding"
+            android:text="scanWifi"
+            android:textAllCaps="false" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/item_margin_bottom"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="connectWifi"
+            android:padding="@dimen/text_padding"
+            android:text="connectWifi"
+            android:textAllCaps="false" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/item_margin_bottom"
+            android:clickable="true"
+            android:gravity="center"
             android:onClick="start5_8gPairing"
             android:padding="@dimen/text_padding"
             android:text="start5_8gPairing"
@@ -54,6 +74,16 @@
             android:onClick="addSerialG5_8StatusListener"
             android:padding="@dimen/text_padding"
             android:text="addSerialG5_8StatusListener"
+            android:textAllCaps="false" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/item_margin_bottom"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="removeAllListener"
+            android:padding="@dimen/text_padding"
+            android:text="removeAllListener"
             android:textAllCaps="false" />
 
 
