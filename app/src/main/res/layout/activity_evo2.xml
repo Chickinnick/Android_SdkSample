@@ -254,13 +254,13 @@
                 android:id="@+id/startScan"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="startScan" />
+                android:text="start5_8gPairing" />
 
             <Button
                 android:id="@+id/connectWifi"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="connect" />
+                android:text="HardwareRealtimelistener" />
 
 
         </LinearLayout>

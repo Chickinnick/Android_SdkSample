@@ -14,38 +14,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.autel.AutelNet2.dsp.controller.DspRFManager2;
-import com.autel.aidl.IBateWifiManager;
+import com.autel.aidl.IHardwareManager;
+import com.autel.aidl.IHardwareRealTimeInterface;
+import com.autel.aidl.ISerialG5_8StatusListener;
+import com.autel.aidl.ISerialKeystrokeListener;
 import com.autel.aidl.WIFiScanResult;
-import com.autel.common.dsp.evo.AircraftRole;
 import com.autel.common.product.AutelProductType;
 import com.autel.sdk.Autel;
 import com.autel.sdk.ProductConnectListener;
 import com.autel.sdk.product.BaseProduct;
 import com.autel.sdksample.dragonfish.DFLayout;
-import com.autel.sdksample.util.FileUtils;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.autel.internal.sdk.AutelBaseApplication.getAppContext;
-
 
 public class ProductActivity extends AppCompatActivity {
-    private final String TAG = getClass().getSimpleName();
+    private static final String TAG = "ProductActivity";
     private int index;
     private long timeStamp;
     static AtomicBoolean hasInitProductListener = new AtomicBoolean(false);
-    private String fileConfig1 = "/sdcard/anddev/autel288_7.cfg";
-    private String fileConfig2 = "/sdcard/anddev/autel288_7_final.weights";
-    private String fileConfig3 = "/sdcard/anddev/autel13.cfg";
-    private String fileConfig4 = "/sdcard/anddev/autel13.backup";
     private AutelProductType currentType = AutelProductType.UNKNOWN;
     private DFLayout dfLayout;
 
-    private IBateWifiManager mService;
+    private IHardwareManager mService;
     private boolean mIsBound;
     private AdditionServiceConnection mServiceConnection;
 
+    private SerialKeyStrokeCallBack mSerialKeyStrokeCallback = new SerialKeyStrokeCallBack();
+    private SerialG5_8StatusCallback mSerial58gStatusCallback = new SerialG5_8StatusCallback();
+    private SerialRealTimeCallback mSerialRealTimeCallback = new SerialRealTimeCallback();
 
 
     /**
@@ -75,9 +72,12 @@ public class ProductActivity extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             // 连接的时候获取本地代理，这样我们就可以调用 service 中的方法了。
-            mService = IBateWifiManager.Stub.asInterface((IBinder) service);
+            mService = IHardwareManager.Stub.asInterface((IBinder) service);
             mIsBound = true;
             try {
+                mService.addSerialKeystrokeListener(mSerialKeyStrokeCallback);
+                mService.addSerialG5_8StatusListener(mSerial58gStatusCallback);
+
                 //设置死亡代理
                 service.linkToDeath(mDeathRecipient, 0);
             } catch (RemoteException e) {
@@ -180,14 +180,15 @@ public class ProductActivity extends AppCompatActivity {
 
         dfLayout.getLayout().findViewById(R.id.startScan).setOnClickListener(v -> {
             try {
-                mService.startScan();
+                mService.start5_8gPairing();
+
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         });
         dfLayout.getLayout().findViewById(R.id.connectWifi).setOnClickListener(v -> {
             try {
-                mService.connect(new WIFiScanResult("wer"),"323423");
+                mService.addHardwareRealTimeListener(mSerialRealTimeCallback);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -254,6 +255,29 @@ public class ProductActivity extends AppCompatActivity {
             i.setClass(context, ProductActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
+        }
+    }
+
+
+    private static final class SerialKeyStrokeCallBack extends ISerialKeystrokeListener.Stub{
+
+        @Override
+        public void onResponse(String event) throws RemoteException {
+            Log.d(TAG,"SerialKeyStrokeCallBack "+event);
+        }
+    }
+    private static final class SerialG5_8StatusCallback extends ISerialG5_8StatusListener.Stub{
+
+        @Override
+        public void onConnect(boolean isConnect) throws RemoteException {
+            Log.d(TAG,"SerialG5_8StatusCallback "+isConnect);
+        }
+    }
+    private static final class SerialRealTimeCallback extends IHardwareRealTimeInterface.Stub{
+
+        @Override
+        public void onRealTimeListener(String data) throws RemoteException {
+            Log.d(TAG,"onRealTimeListener -> "+data);
         }
     }
 }
