@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.autel.common.error.AutelError;
+import com.autel.common.video.OnRenderFrameInfoListener;
 import com.autel.sdk.product.BaseProduct;
 import com.autel.sdk.video.AutelCodec;
 import com.autel.sdk.video.AutelCodecListener;
@@ -127,34 +128,24 @@ public class CodecActivity extends BaseActivity<AutelCodec> {
                 content_layout.setVisibility(View.VISIBLE);
                 content_layout.addView(autelCodecView);
                 if (null != mController) {
-                    mController.setCodecListener(new AutelCodecListener() {
+                    AutelCodecView.setOnRenderFrameInfoListener(new OnRenderFrameInfoListener() {
+                        @Override
+                        public void onRenderFrameTimestamp(long l) {
+
+                        }
+
+                        @Override
+                        public void onRenderFrameSizeChanged(int width, int height) {
+                            logOut("width:"+width+" height:"+height);
+                        }
+
                         @Override
                         public void onFrameStream(final byte[] videoBuffer, final boolean isIFrame, final int size, final long pts) {
-                            Log.d("onFrameStream"," onFrameStream size "+size);
-                            if(null == videoBuffer) return;
+                            Log.d("onFrameStream", " onFrameStream size " + size);
+                            if (null == videoBuffer) return;
                             logOut("isValid == " + (videoBuffer.length == size) + "\nisIFrame == " + isIFrame + "\nsize == " + size + "\npts == " + pts);
                         }
-
-                        @Override
-                        public void onCanceled() {
-//                            logTV.post(new Runnable() {
-//                                @Override
-//                                public void run() {
-                                    logOut("onCandeled");
-//                                }
-//                            });
-                        }
-
-                        @Override
-                        public void onFailure(final AutelError error) {
-//                            logTV.post(new Runnable() {
-//                                @Override
-//                                public void run() {
-                                    logOut(error.getDescription());
-//                                }
-//                            });
-                        }
-                    }, null);
+                    });
                 }
             }
         });

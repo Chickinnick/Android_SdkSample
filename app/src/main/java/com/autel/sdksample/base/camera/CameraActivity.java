@@ -146,6 +146,11 @@ public class CameraActivity extends AppCompatActivity {
             public void onRenderFrameSizeChanged(int width, int height) {
 
             }
+
+            @Override
+            public void onFrameStream(byte[] bytes, boolean b, int i, long l) {
+
+            }
         });
         codecView.setOverExposure(false, R.drawable.expo1280);
     }
