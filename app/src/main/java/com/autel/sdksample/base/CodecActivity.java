@@ -173,5 +173,6 @@ public class CodecActivity extends BaseActivity<AutelCodec> {
 
     public void onDestroy() {
         super.onDestroy();
+        AutelCodecView.setOnRenderFrameInfoListener(null);
     }
 }
