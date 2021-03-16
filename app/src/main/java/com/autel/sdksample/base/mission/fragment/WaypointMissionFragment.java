@@ -2,7 +2,7 @@ package com.autel.sdksample.base.mission.fragment;
 
 import android.annotation.SuppressLint;
 
-import com.autel.common.mission.xstar.Waypoint;
+import com.autel.common.mission.evo2.Evo2Waypoint;
 import com.autel.sdksample.base.mission.AutelLatLng;
 import com.autel.sdksample.base.mission.MapOperator;
 import com.autel.sdksample.base.mission.MapRectifyUtil;
@@ -29,7 +29,7 @@ public abstract class WaypointMissionFragment extends MissionFragment {
 
     @Override
     public void onMarkerClick(int position) {
-        Waypoint waypoint = getWaypoint(position);
+        Evo2Waypoint waypoint = getWaypoint(position);
         if(null == waypoint){
             return;
         }
@@ -38,7 +38,7 @@ public abstract class WaypointMissionFragment extends MissionFragment {
         waypointSettingDialog.showDialog();
     }
 
-    protected abstract Waypoint getWaypoint(int index);
+    protected abstract Evo2Waypoint getWaypoint(int index);
 
     protected abstract void waypointAdded(AutelLatLng latLng);
 }

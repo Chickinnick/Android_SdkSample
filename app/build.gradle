@@ -68,7 +68,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation('com.squareup.okhttp3:okhttp:3.8.1')
     implementation 'com.autel:autel-sdk:2.0.11.79@aar'
-//    api(name: "autel-sdk-2.0.11-evo-release-20201013.082513-10", ext: "aar") {
+
+//    implementation(name: "autel-sdk-2.0.11-evo-release-20201013.082513-10", ext: "aar") {
 //        exclude module: 'okio'
 //        exclude module: 'okhttp'
 //    }

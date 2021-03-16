@@ -13,6 +13,7 @@ import android.widget.Spinner;
 
 import com.autel.common.mission.AutelCoordinate3D;
 import com.autel.common.mission.AutelMission;
+import com.autel.common.mission.evo2.Evo2Waypoint;
 import com.autel.common.mission.xstar.Waypoint;
 import com.autel.common.mission.xstar.WaypointFinishedAction;
 import com.autel.common.mission.xstar.WaypointMission;
@@ -49,11 +50,12 @@ public class XStarWaypointFragment extends WaypointMissionFragment {
     }
 
     @Override
-    protected Waypoint getWaypoint(int index) {
+    protected Evo2Waypoint getWaypoint(int index) {
         if (index >= wayPointList.size()) {
             return null;
         }
-        return wayPointList.get(index);
+//        return wayPointList.get(index);
+    return null;
     }
 
     @Override

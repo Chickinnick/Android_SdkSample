@@ -58,7 +58,7 @@ public abstract class MapActivity extends FragmentActivity implements MapOperato
     }
 
     public static final float MapInitZoomSize = 18.0f;
-    final String TAG = getClass().getSimpleName();
+    final String TAG = "QWE1MAPACT";
     LocationManager mLocationManager;
     LocationListener mLocationListener;
     LocationListener netLocationListener;
@@ -177,6 +177,7 @@ public abstract class MapActivity extends FragmentActivity implements MapOperato
         }
         switch (baseProduct.getType()) {
             case EVO:
+            case EVO_2:
                 switch (type) {
                     case WAYPOINT:
                         getSupportFragmentManager().beginTransaction().replace(R.id.mission_item_content, new EvoWaypointFragment(this)).commit();

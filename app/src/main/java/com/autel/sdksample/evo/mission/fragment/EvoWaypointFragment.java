@@ -3,6 +3,7 @@ package com.autel.sdksample.evo.mission.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,10 @@ import android.widget.Spinner;
 
 import com.autel.common.mission.AutelCoordinate3D;
 import com.autel.common.mission.AutelMission;
-import com.autel.common.mission.evo.EvoWaypoint;
-import com.autel.common.mission.evo.EvoWaypointFinishedAction;
-import com.autel.common.mission.evo.EvoWaypointMission;
+import com.autel.common.mission.MissionType;
+import com.autel.common.mission.evo2.Evo2Waypoint;
+import com.autel.common.mission.evo2.Evo2WaypointFinishedAction;
+import com.autel.common.mission.evo2.Evo2WaypointMission;
 import com.autel.common.mission.xstar.Waypoint;
 import com.autel.sdksample.R;
 import com.autel.sdksample.base.mission.AutelLatLng;
@@ -26,6 +28,7 @@ import com.autel.sdksample.evo.mission.adapter.EvoWaypointFinishActionAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  *
@@ -37,8 +40,8 @@ public class EvoWaypointFragment extends WaypointMissionFragment {
     private EditText waypointReturnHeight;
     private EditText waypointHeight;
     private EvoWaypointFinishActionAdapter finishActionAdapter = null;
-    private EvoWaypointFinishedAction finishedAction = EvoWaypointFinishedAction.UNKNOWN;
-    List<EvoWaypoint> wayPointList = new ArrayList<>();
+    private Evo2WaypointFinishedAction finishedAction = Evo2WaypointFinishedAction.UNKNOWN;
+    List<Evo2Waypoint> wayPointList = new ArrayList<>();
 
     @SuppressLint("ValidFragment")
     public EvoWaypointFragment(MapOperator mMapOperator) {
@@ -50,7 +53,7 @@ public class EvoWaypointFragment extends WaypointMissionFragment {
     }
 
     @Override
-    protected Waypoint getWaypoint(int index) {
+    protected Evo2Waypoint getWaypoint(int index) {
         if (index >= wayPointList.size()) {
             return null;
         }
@@ -74,7 +77,7 @@ public class EvoWaypointFragment extends WaypointMissionFragment {
         finishActionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                finishedAction = (EvoWaypointFinishedAction) parent.getAdapter().getItem(position);
+                finishedAction = (Evo2WaypointFinishedAction) parent.getAdapter().getItem(position);
             }
 
             @Override
@@ -92,8 +95,21 @@ public class EvoWaypointFragment extends WaypointMissionFragment {
 
     @Override
     public AutelMission createAutelMission() {
-        EvoWaypointMission waypointMission = new EvoWaypointMission();
+        Evo2WaypointMission waypointMission = new Evo2WaypointMission();
         waypointMission.finishedAction = finishedAction;
+//
+           waypointMission.missionId = 2; //Mission id
+        waypointMission.missionType = MissionType.Waypoint; //Mission type (Waypoint (waypoint), RECTANGLE (rectangle), POLYGON (polygon))
+        waypointMission.totalFlyTime = 351; //Total flight time (unit s)
+        waypointMission.totalDistance = 897; //Total flight distance (in m)
+        waypointMission.VerticalFOV = 53.6f; //Read real-time heartbeat data of the camera
+        waypointMission.HorizontalFOV = 68.0f; //Read real-time heartbeat data of the camera
+        waypointMission.PhotoIntervalMin = 1020;
+        waypointMission.MissionName = "Mission_1";
+        waypointMission.GUID = UUID.randomUUID().toString().replace("-", "");
+
+        waypointMission.missionAction = 1;
+
         String valueReturnHeight = waypointReturnHeight.getText().toString();
         waypointMission.finishReturnHeight = isEmpty(valueReturnHeight) ? 40 : Integer.valueOf(valueReturnHeight);
         waypointMission.wpList = wayPointList;
@@ -104,8 +120,9 @@ public class EvoWaypointFragment extends WaypointMissionFragment {
     @Override
     protected void waypointAdded(AutelLatLng latLng) {
         String wHeight = waypointHeight.getText().toString();
-        EvoWaypoint waypoint = new EvoWaypoint(new AutelCoordinate3D(latLng.latitude, latLng.longitude, isEmpty(wHeight) ? 0 : Double.valueOf(wHeight)));
+        Evo2Waypoint waypoint = new Evo2Waypoint(new AutelCoordinate3D(latLng.latitude, latLng.longitude, isEmpty(wHeight) ? 0 : Double.valueOf(wHeight)));
         wayPointList.add(waypoint);
+        Log.i("QWE1EvoWaypointFragment", "waypointAdded: __");
     }
 
     public void hideBar() {

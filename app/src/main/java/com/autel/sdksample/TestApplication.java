@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class TestApplication extends MultiDexApplication {
-    private final String TAG = getClass().getSimpleName();
+    private final String TAG = "QWE1TestApplication";
     private BaseProduct currentProduct;
 
 
@@ -37,7 +37,7 @@ public class TestApplication extends MultiDexApplication {
          * 初始化SDK，通过网络验证APPKey的有效性
          */
         Thread.setDefaultUncaughtExceptionHandler(new EHandle(Thread.getDefaultUncaughtExceptionHandler()));
-        String appKey = "<SDK license should be input>";
+        String appKey = "d2d8ffb01d2b57e725d231297c50b607";
         AutelSdkConfig config = new AutelSdkConfig.AutelSdkConfigBuilder()
                 .setAppKey(appKey)
                 .setPostOnUi(true)

@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.autel.common.mission.evo2.Evo2Waypoint;
 import com.autel.common.mission.xstar.Waypoint;
 import com.autel.sdksample.R;
 
@@ -18,9 +19,9 @@ public class WaypointSettingDialog {
 
     private final Dialog waypointSettingDialog;
     private final int position;
-    private Waypoint mWaypoint;
+    private Evo2Waypoint mWaypoint;
 
-    public WaypointSettingDialog(Context context, int position, Waypoint waypoint){
+    public WaypointSettingDialog(Context context, int position, Evo2Waypoint waypoint){
         this.position = position;
         waypointSettingDialog = new Dialog(context,android.R.style.Theme_Translucent);
         waypointSettingDialog.setContentView(R.layout.dialog_waypoint_setting);

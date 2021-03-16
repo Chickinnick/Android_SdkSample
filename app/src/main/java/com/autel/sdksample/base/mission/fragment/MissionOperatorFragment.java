@@ -26,6 +26,7 @@ import com.autel.common.mission.RealTimeInfo;
 import com.autel.common.mission.xstar.OrbitMission;
 import com.autel.common.mission.xstar.Waypoint;
 import com.autel.common.mission.xstar.WaypointMission;
+import com.autel.internal.product.Evo2AircraftImpl;
 import com.autel.internal.product.EvoAircraftImpl;
 import com.autel.sdk.mission.MissionManager;
 import com.autel.sdk.product.BaseProduct;
@@ -53,6 +54,7 @@ public class MissionOperatorFragment extends Fragment {
 
     MissionManager missionManager;
 
+    private static final String TAG = "QWE1MissOperatFr";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -71,6 +73,8 @@ public class MissionOperatorFragment extends Fragment {
                     return ((XStarPremiumAircraft) product).getMissionManager();
                 case EVO:
                     return ((EvoAircraftImpl) product).getMissionManager();
+                case EVO_2:
+                    return ((Evo2AircraftImpl) product).getMissionManager();
             }
 
         }
@@ -97,6 +101,7 @@ public class MissionOperatorFragment extends Fragment {
                     missionManager.setRealTimeInfoListener(new CallbackWithOneParam<RealTimeInfo>() {
                         @Override
                         public void onSuccess(RealTimeInfo realTimeInfo) {
+                            Log.i(TAG, "setRealTimeInfoListener onSuccess: " + realTimeInfo.toString());
                             if (getActivity() != null){
                                 ((MapActivity) getActivity()).updateLogInfo("RealTimeInfo : " + realTimeInfo);
                             }
@@ -104,6 +109,8 @@ public class MissionOperatorFragment extends Fragment {
 
                         @Override
                         public void onFailure(AutelError autelError) {
+                            Log.i(TAG, "setRealTimeInfoListener onSuccess: " + autelError.getErrCode() + " " + autelError.getDescription());
+
                             if (getActivity() != null)
                                 ((MapActivity) getActivity()).updateMissionInfo("Mission state : " + autelError.getDescription());
                         }
@@ -129,37 +136,45 @@ public class MissionOperatorFragment extends Fragment {
         missionPrepare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i(TAG, "onClick:missionPrepare" );
                 if (null != missionManager) {
                     progressBarPrepare.setVisibility(View.VISIBLE);
-                    missionManager.prepareMission(((MapActivity)getActivity()).createMission(), new CallbackWithOneParamProgress<Boolean>() {
-                        @Override
-                        public void onProgress(float v) {
+                    AutelMission mission = ((MapActivity) getActivity()).createMission();
+                    try {
+                        missionManager.prepareMission(mission, new CallbackWithOneParamProgress<Boolean>() {
+                            @Override
+                            public void onProgress(float v) {
+                                Log.i(TAG, "onProgress: ");
+                            }
 
-                        }
+                            @Override
+                            public void onSuccess(Boolean aBoolean) {
+                                Log.d(TAG, "onSuccess() called with: aBoolean = [" + aBoolean + "]");
+                                toastView( R.string.mission_prepare_notify);
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        progressBarPrepare.setVisibility(View.GONE);
+                                    }
+                                });
 
-                        @Override
-                        public void onSuccess(Boolean aBoolean) {
-                            toastView( R.string.mission_prepare_notify);
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressBarPrepare.setVisibility(View.GONE);
-                                }
-                            });
+                            }
 
-                        }
-
-                        @Override
-                        public void onFailure(AutelError autelError) {
-                            toastView(autelError);
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressBarPrepare.setVisibility(View.GONE);
-                                }
-                            });
-                        }
-                    });
+                            @Override
+                            public void onFailure(AutelError autelError) {
+                                Log.d(TAG, "onFailure() called with: autelError = [" + autelError.getDescription() + "]");
+                                toastView(autelError);
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        progressBarPrepare.setVisibility(View.GONE);
+                                    }
+                                });
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -168,17 +183,24 @@ public class MissionOperatorFragment extends Fragment {
         missionStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i(TAG, "onClick:missionStart " + missionManager);
+
                 if (null != missionManager) {
                     missionManager.startMission(new CallbackWithNoParam() {
                         @Override
                         public void onSuccess() {
+                            Log.d(TAG, "startMission onSuccess() called");
+
                             toastView( R.string.mission_start_notify);
                         }
 
                         @Override
                         public void onFailure(AutelError autelError) {
+                            Log.d(TAG, "startMission onFailure() called " + autelError.getDescription() + " " + autelError.getErrCode().name() +  " " + autelError.getErrCode().getCode());
+
                             toastView(autelError);
                         }
+
                     });
                 }
             }
@@ -192,11 +214,15 @@ public class MissionOperatorFragment extends Fragment {
                     missionManager.pauseMission(new CallbackWithNoParam() {
                         @Override
                         public void onSuccess() {
+                            Log.d(TAG, "pauseMission onSuccess() called");
+
                             toastView( R.string.mission_pause_notify);
                         }
 
                         @Override
                         public void onFailure(AutelError autelError) {
+                            Log.d(TAG, "pauseMission onFailure() called " + autelError.getDescription() + " " + autelError.getErrCode().name() +  " " + autelError.getErrCode().getCode());
+
                             toastView(autelError);
                         }
                     });
@@ -212,11 +238,15 @@ public class MissionOperatorFragment extends Fragment {
                     missionManager.resumeMission(new CallbackWithNoParam() {
                         @Override
                         public void onSuccess() {
+                            Log.d(TAG, "resumeMission onSuccess() called");
+
                             toastView( R.string.mission_resume_notify);
                         }
 
                         @Override
                         public void onFailure(AutelError autelError) {
+                            Log.d(TAG, "resumeMission onFailure() called " + autelError.getDescription() + " " + autelError.getErrCode().name() +  " " + autelError.getErrCode().getCode());
+
                             toastView(autelError);
                         }
                     });
@@ -258,6 +288,8 @@ public class MissionOperatorFragment extends Fragment {
 
                         @Override
                         public void onSuccess(AutelMission autelMission) {
+                            Log.d(TAG, "downloadMission onSuccess() called");
+
                             toastView( R.string.mission_download_notify);
                             mHandler.post(new Runnable() {
                                 @Override
@@ -277,6 +309,8 @@ public class MissionOperatorFragment extends Fragment {
 
                         @Override
                         public void onFailure(AutelError autelError) {
+                            Log.d(TAG, "downloadMission onFailure() called " + autelError.getDescription() + " " + autelError.getErrCode().name() +  " " + autelError.getErrCode().getCode());
+
                             toastView(autelError);
                             mHandler.post(new Runnable() {
                                 @Override
@@ -324,6 +358,8 @@ public class MissionOperatorFragment extends Fragment {
             public void onClick(View v) {
                 if (null != missionManager) {
                     MissionExecuteState state = missionManager.getMissionExecuteState();
+                    Log.d(TAG, "getMissionExecuteState onSuccess() called   " + state.name());
+
                     ((MapActivity) getActivity()).updateLogInfo(null != state ? state.toString() : "UNKNOWN");
                 }
             }
