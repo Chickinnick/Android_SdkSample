@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/item_margin_bottom"
             android:background="@drawable/text_background"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/setBaseStationLocation"
