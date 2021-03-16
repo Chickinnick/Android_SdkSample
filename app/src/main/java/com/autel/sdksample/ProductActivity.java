@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.autel.AutelNet2.dsp.controller.DspRFManager2;
+import com.autel.AutelNet2.dsp.data.UserInfo;
+import com.autel.common.dsp.evo.AircraftRole;
 import com.autel.common.product.AutelProductType;
 import com.autel.sdk.Autel;
 import com.autel.sdk.ProductConnectListener;
@@ -108,6 +111,13 @@ public class ProductActivity extends AppCompatActivity {
 
         }
         return new EVO2Layout(this).getLayout();
+    }
+
+    public void setFrequency(View view) {
+        DspRFManager2.getInstance().bingAircraftToRemote(AircraftRole.SLAVER);
+    }
+    public void setMasterFequency(View view) {
+        DspRFManager2.getInstance().bingAircraftToRemote(AircraftRole.MASTER);
     }
 
     public void onResume() {

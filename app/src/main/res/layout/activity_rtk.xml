@@ -83,11 +83,75 @@
             android:onClick="getRtkRecvType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
         <Button
             android:id="@+id/setRtkInfoListener"
             android:text="setRtkInfoListener"
             android:textAllCaps="false"
             android:onClick="setRtkInfoListener"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/setFequency"
+            android:text="setFequency"
+            android:textAllCaps="false"
+            android:onClick="setFrequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/item_margin_bottom"
+            android:background="@drawable/text_background"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/setBaseStationLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:onClick="setBaseStationLocation"
+                android:padding="@dimen/text_padding"
+                android:text="setBaseStationLocation"
+                android:textAllCaps="false" />
+
+            <EditText
+                android:id="@+id/lat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="latitude"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:id="@+id/lng"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="longitude"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:id="@+id/alt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="@string/Altitude"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/setBaseStationListener"
+            android:text="setBaseStationListener"
+            android:textAllCaps="false"
+            android:onClick="setBaseStationListener"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/setBaseStationLocationListener"
+            android:text="setBaseStationLocationListener"
+            android:textAllCaps="false"
+            android:onClick="setBaseStationLocationListener"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
